@@ -11,15 +11,15 @@ describe('crypto', () => {
 
     const alice = {
       publicKey: 'OH8olQvUFfxqjd+A4FkPQZq0mSb9GGKIOfuCFLDd0B0=',
-      secretKey: 'TVTqqajwDkAMlztAJEkgcnEd1KzWheaDQE6sxPGlUlY4fyiVC9QV/GqN34DgWQ9BmrSZJv0YYog5+4IUsN3QHQ==' // prettier-ignore
+      secretKey: 'TVTqqajwDkAMlztAJEkgcnEd1KzWheaDQE6sxPGlUlY4fyiVC9QV/GqN34DgWQ9BmrSZJv0YYog5+4IUsN3QHQ==', // prettier-ignore
     }
 
     // prettier-ignore
     const signedMessage: SignedMessage = {
-      payload: 'one if by day, two if by night',
-      signature: 'Qd9f/Xgk9QFG9nVNb/QkHqKTNF0JQCEy848m4w8UmxSRwnuomBZz6Bi8wDopz//iKwHq3ipMvA2AGAw8Oo19Dw==', // prettier-ignore
-      publicKey: alice.publicKey,
-    }
+        payload: 'one if by day, two if by night',
+        signature: 'Qd9f/Xgk9QFG9nVNb/QkHqKTNF0JQCEy848m4w8UmxSRwnuomBZz6Bi8wDopz//iKwHq3ipMvA2AGAw8Oo19Dw==', // prettier-ignore
+        publicKey: alice.publicKey,
+      }
 
     test('alice signs with her secret key', () => {
       const { payload: content, signature: knownSignature } = signedMessage
