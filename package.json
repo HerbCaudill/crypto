@@ -1,0 +1,54 @@
+{
+  "name": "@herbcaudill/crypto",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Herb Caudill",
+    "email": "herb@devresults.com"
+  },
+  "description": "Wrapper functions for TweetNACL",
+  "main": "dist/index.js",
+  "module": "dist/crypto.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "build": "tsdx build",
+    "postbuild": "tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "prepare": "tsdx build",
+    "start": "tsdx watch",
+    "test": "tsdx test"
+  },
+  "dependencies": {
+    "@stablelib/base64": "1",
+    "@stablelib/utf8": "1",
+    "fast-memoize": "2",
+    "json-stable-stringify": "1",
+    "msgpack-lite": "^0.1.26",
+    "scryptsy": "2",
+    "tweetnacl": "1"
+  },
+  "devDependencies": {
+    "@types/json-stable-stringify": "1",
+    "@types/msgpack-lite": "0",
+    "@types/scryptsy": "2",
+    "prettier": "2",
+    "tscpaths": "0",
+    "tsdx": "0",
+    "tslib": "1",
+    "typescript": "3",
+    "v8-profiler-node8": "6"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "semi": false,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "arrowParens": "avoid"
+  }
+}
