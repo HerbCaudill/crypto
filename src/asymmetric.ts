@@ -14,7 +14,7 @@ function keyPair() {
   return keypairToBase64(nacl.box.keyPair())
 }
 
-/**
+/**git
  * Asymmetrically encrypts a string of text.
  * @param secret The plaintext to encrypt
  * @param recipientPublicKey The public key of the intended recipient
