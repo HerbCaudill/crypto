@@ -1,4 +1,5 @@
-﻿import { asymmetric } from '/asymmetric'
+﻿import { randomKey } from './randomKey'
+import { asymmetric } from '/asymmetric'
 import { signatures } from '/signatures'
 
 const { encrypt, decrypt } = asymmetric
@@ -84,6 +85,17 @@ describe('crypto', () => {
           recipientSecretKey: eve.secretKey,
         })
       expect(attemptToDecrypt).toThrow()
+    })
+  })
+
+  describe('keyPair', () => {
+    test('is deterministic if secretKey is provided', () => {
+      const secretKey = 'Bjhq9cIEFbzxUhKHKik8EDk4Oc9kTMXqbum+Gqj+Eh4='
+      const keyPair = asymmetric.keyPair(secretKey)
+      expect(keyPair).toEqual({
+        secretKey,
+        publicKey: 'c69ecojC6v71m/ClVNDBaSrIJ3jKr+LHitXoCMFOxio=',
+      })
     })
   })
 })

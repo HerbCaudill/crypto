@@ -6,12 +6,16 @@ import { newNonce } from '/nonce'
 import { Key, keypairToBase64, keyToBytes, Payload, payloadToBytes } from '/util'
 
 /**
+ * @param secretKey (optional) If provided, the the key pair will be derived from the secret key.
  * @returns A key pair consisting of a public key and a secret key, encoded as base64 strings, to
  * use for asymmetric encryption and decryption. (Note that asymmetric encryption keys cannot be
  * used for signatures, and vice versa.)
  */
-function keyPair() {
-  return keypairToBase64(nacl.box.keyPair())
+function keyPair(secretKey?: Key) {
+  const keyPair = secretKey
+    ? nacl.box.keyPair.fromSecretKey(keyToBytes(secretKey))
+    : nacl.box.keyPair()
+  return keypairToBase64(keyPair)
 }
 
 /**
