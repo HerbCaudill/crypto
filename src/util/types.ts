@@ -1,9 +1,12 @@
-﻿export type UnixTimestamp = number
-export type Utf8 = string
+﻿export type Utf8 = string
 export type Base64 = string
-export type SemVer = string
 export type Key = Utf8 | Uint8Array
 export type Payload = Base64 | Uint8Array | object
+
+export type ByteKeypair = {
+  publicKey: Uint8Array
+  secretKey: Uint8Array
+}
 
 export type Base64Keypair = {
   publicKey: Base64
@@ -12,5 +15,3 @@ export type Base64Keypair = {
 
 export type Encrypted<T> = string
 export type Serialized<T> = string
-
-export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<T>
