@@ -2,6 +2,7 @@ import { asymmetric } from '/asymmetric'
 import { signatures, SignedMessage } from '/signatures'
 
 import nacl from 'tweetnacl'
+import { randomKey } from './randomKey'
 
 const plaintext = 'The leopard pounces at noon'
 
@@ -109,6 +110,16 @@ describe('crypto', () => {
     test('fwiw: cannot use encryption keys to sign', () => {
       const a = asymmetric.keyPair()
       expect(() => sign(plaintext, a.secretKey)).toThrow()
+    })
+
+    test('keypair generated from seed is deterministic', () => {
+      const seed = '50ieozWliq3vhJyP6SHLdRYh0NRnrED7bzPXELKERtk'
+      const keys = signatures.keyPair(seed)
+      expect(keys).toEqual({
+        publicKey: 'LW3aDMjZ79w075KlqhRRXW0bIO8+o2pi13lXeg1IW5Y=',
+        secretKey:
+          '50ieozWliq3vhJyP6SHLdRYh0NRnrED7bzPXELKERtktbdoMyNnv3DTvkqWqFFFdbRsg7z6jamLXeVd6DUhblg==',
+      })
     })
   })
 })

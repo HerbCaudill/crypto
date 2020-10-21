@@ -8,11 +8,17 @@ import memoize from 'fast-memoize'
 
 export const signatures = {
   /**
+   * @param seed (optional) If provided, the the key pair will be derived from the seed.
    * @returns A key pair consisting of a public key and a secret key, encoded as base64 strings, to
    * use for signing and verifying messages. (Note that signature keys cannot be used for asymmetric
    * encryption, and vice versa.)
    */
-  keyPair: () => keypairToBase64(nacl.sign.keyPair()),
+  keyPair: (seed?: Key) => {
+    const keyPair = seed //
+      ? nacl.sign.keyPair.fromSeed(keyToBytes(seed))
+      : nacl.sign.keyPair()
+    return keypairToBase64(keyPair)
+  },
 
   /**
    * @param message The plaintext message to sign
