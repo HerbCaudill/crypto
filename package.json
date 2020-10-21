@@ -1,6 +1,6 @@
 {
   "name": "@herbcaudill/crypto",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "license": "MIT",
   "private": false,
   "author": {
@@ -8,7 +8,7 @@
     "email": "herb@devresults.com"
   },
   "description": "Wrapper functions for TweetNACL",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "module": "dist/crypto.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -30,7 +30,7 @@
     "@stablelib/utf8": "1",
     "fast-memoize": "2",
     "json-stable-stringify": "1",
-    "msgpack-lite": "^0.1.26",
+    "msgpack-lite": "0",
     "scryptsy": "2",
     "tweetnacl": "1"
   },
