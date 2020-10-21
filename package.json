@@ -7,8 +7,8 @@
     "name": "Herb Caudill",
     "email": "herb@devresults.com"
   },
-  "description": "Wrapper functions for TweetNACL",
-  "main": "src/index.ts",
+  "description": "Wrapper functions for TweetNaCl",
+  "main": "dist/index.js",
   "module": "dist/crypto.esm.js",
   "typings": "dist/index.d.ts",
   "files": [
@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "tsdx build",
-    "postbuild": "tscpaths -p tsconfig.json -s ./src -o ./dist",
+    "postbuild": "tscpaths -p tsconfig.json -s ./src -o ./dist --silent",
     "prepare": "tsdx build",
     "start": "tsdx watch",
     "test": "tsdx test"
@@ -35,11 +35,11 @@
     "tweetnacl": "1"
   },
   "devDependencies": {
+    "@herbcaudill/tscpaths": "0",
     "@types/json-stable-stringify": "1",
     "@types/msgpack-lite": "0",
     "@types/scryptsy": "2",
     "prettier": "2",
-    "tscpaths": "0",
     "tsdx": "0",
     "tslib": "1",
     "typescript": "3",
