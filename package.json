@@ -1,6 +1,6 @@
 {
   "name": "@herbcaudill/crypto",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "license": "MIT",
   "private": false,
   "author": {
@@ -19,8 +19,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "tsdx build",
-    "postbuild": "tscpaths -p tsconfig.json -s ./src -o ./dist --silent",
+    "build": "tsdx build && tscpaths -p tsconfig.json -s ./src -o ./dist",
     "prepare": "tsdx build",
     "start": "tsdx watch",
     "test": "tsdx test"
