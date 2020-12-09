@@ -1,14 +1,13 @@
 ﻿import * as utf8 from '@stablelib/utf8'
 import nacl from 'tweetnacl'
 import scrypt from 'scryptsy'
-import memoize from 'fast-memoize'
 
 /**
  * Uses the `scrypt` algorithm to deterministically derive a 32-byte key from the password provided.
  * @password The password to use as a seed
  * @returns A derived 32-byte secret key to use for symmetric encryption or other purposes
  */
-export const stretch = memoize((password: string | Uint8Array) => {
+export const stretch = (password: string | Uint8Array) => {
   const salt = 'Sõdìüm ÇhLôrɩdé'
   const passwordBytes = typeof password === 'string' ? utf8.encode(password) : password
 
@@ -26,4 +25,4 @@ export const stretch = memoize((password: string | Uint8Array) => {
     parallelizationFactor,
     nacl.secretbox.keyLength // = 32
   )
-})
+}

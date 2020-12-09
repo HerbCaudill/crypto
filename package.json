@@ -27,7 +27,6 @@
   "dependencies": {
     "@stablelib/base64": "1",
     "@stablelib/utf8": "1",
-    "fast-memoize": "2",
     "json-stable-stringify": "1",
     "msgpack-lite": "0",
     "scryptsy": "2",
