@@ -1,6 +1,6 @@
 ﻿export type Utf8 = string
 export type Base64 = string
-export type Key = Utf8 | Uint8Array
+export type Key = Base64 | Uint8Array
 export type Payload = Base64 | Uint8Array | object
 
 export type ByteKeypair = {
