@@ -2,6 +2,7 @@
 import nacl from 'tweetnacl'
 import scrypt from 'scryptsy'
 import { bufferToUint8Array } from './util/bufferToUint8Array'
+import { Buffer } from 'buffer'
 
 /**
  * Uses the `scrypt` algorithm to deterministically derive a 32-byte key from the password provided.
