@@ -11,7 +11,7 @@ In my experience NaCl still leaves a handful of critical tasks to be performed w
 - Choosing encodings and converting strings to and from byte arrays
 - Stretching passwords for symmetric encryption
 
-The functions provided by this library encapsulate my preferred solutions to those problems. As a developer only have to provide the inputs to these functions, so that I can encrypt, decrypt, and sign without having to think about the implementation details.
+The functions provided by this library encapsulate my preferred solutions to those problems. As a developer I only have to provide the inputs to these functions, so that I can encrypt, decrypt, and sign without having to think about the implementation details.
 
 - Multi-part ciphers are packed and unpacked using `msgpack`
 - All functions can accept either byte arrays or strings
