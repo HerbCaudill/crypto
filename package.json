@@ -27,10 +27,9 @@
   "dependencies": {
     "@stablelib/base64": "1",
     "@stablelib/utf8": "1",
-    "buffer": "3",
     "json-stable-stringify": "1",
     "msgpack-lite": "0",
-    "scryptsy": "2",
+    "scrypt-js": "^3.0.1",
     "tweetnacl": "1"
   },
   "devDependencies": {

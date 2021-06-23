@@ -1,8 +1,6 @@
-﻿import * as utf8 from '@stablelib/utf8'
-import nacl from 'tweetnacl'
-import scrypt from 'scryptsy'
-import { bufferToUint8Array } from './util/bufferToUint8Array'
-import { Buffer } from 'buffer'
+﻿import nacl from 'tweetnacl'
+import { syncScrypt as scrypt } from 'scrypt-js'
+import { utf8 } from './util/utf8'
 
 /**
  * Uses the `scrypt` algorithm to deterministically derive a 32-byte key from the password provided.
@@ -10,7 +8,7 @@ import { Buffer } from 'buffer'
  * @returns A derived 32-byte secret key to use for symmetric encryption or other purposes
  */
 export const stretch = (password: string | Uint8Array): Uint8Array => {
-  const salt = 'Sõdìüm ÇhLôrɩdé'
+  const salt = utf8.encode('Sõdìüm ÇhLôrɩdé')
   const passwordBytes = typeof password === 'string' ? utf8.encode(password) : password
 
   // `scrypt` is intended to be expensive not only in CPU time but in memory usage.
@@ -19,14 +17,12 @@ export const stretch = (password: string | Uint8Array): Uint8Array => {
   const blockSizeFactor = 8
   const costFactor = 2 ** 11
   const parallelizationFactor = 1
-  return bufferToUint8Array(
-    scrypt(
-      Buffer.from(passwordBytes),
-      salt,
-      costFactor,
-      blockSizeFactor,
-      parallelizationFactor,
-      nacl.secretbox.keyLength // = 32
-    )
+  return scrypt(
+    passwordBytes,
+    salt,
+    costFactor,
+    blockSizeFactor,
+    parallelizationFactor,
+    nacl.secretbox.keyLength // = 32
   )
 }
