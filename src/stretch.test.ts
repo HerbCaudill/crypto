@@ -9,7 +9,7 @@ describe('stretch', () => {
   })
 
   test('takes a byte array as as password', () => {
-    const password = keyToBytes('hello123')
+    const password = keyToBytes('5VbnBW')
     const key = stretch(password)
     expect(key).toHaveLength(32)
   })

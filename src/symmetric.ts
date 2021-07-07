@@ -1,4 +1,4 @@
-﻿import * as base64 from '@stablelib/base64'
+﻿import { base58 } from '/util'
 import * as utf8 from '@stablelib/utf8'
 import msgpack from 'msgpack-lite'
 import nacl from 'tweetnacl'
@@ -7,7 +7,7 @@ import { stretch } from '/stretch'
 import { Encrypted, Key, keyToBytes, Payload, payloadToBytes, Serialized } from '/util'
 
 // These are straightforward implementations of NaCl crypto functions, accepting and returning
-// base64 strings rather than byte arrays. The symmetric `encrypt` and `decrypt` functions can take
+// base58 strings rather than byte arrays. The symmetric `encrypt` and `decrypt` functions can take
 // passwords instead of 32-byte keys; the password is expanded using the
 // [scrypt](https://en.wikipedia.org/wiki/Scrypt) algorithm.
 
@@ -27,7 +27,7 @@ export const symmetric = {
 
     const cipherBytes = msgpack.encode({ nonce, message: encrypted })
 
-    return base64.encode(cipherBytes)
+    return base58.encode(cipherBytes)
   },
 
   /**

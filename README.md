@@ -17,7 +17,7 @@ The functions provided by this library encapsulate my preferred solutions to tho
 - All functions can accept either byte arrays or strings
 - All functions output strings
 - Human-facing text is encoded and decoded as `utf-8`
-- Keys and ciphers are encoded and decoded as `base64`
+- Keys and ciphers are encoded and decoded as `base58`
 - Passwords are stretched using `scrypt`
 
 ### Installation

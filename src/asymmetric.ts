@@ -1,13 +1,13 @@
-﻿import * as base64 from '@stablelib/base64'
+﻿import { base58 } from '/util'
 import { decode as utf8Decode } from '@stablelib/utf8'
 import msgpack from 'msgpack-lite'
 import nacl from 'tweetnacl'
 import { newNonce } from '/nonce'
-import { Key, keypairToBase64, keyToBytes, Payload, payloadToBytes } from '/util'
+import { Key, keypairToBase58, keyToBytes, Payload, payloadToBytes } from '/util'
 
 /**
  * @param secretKey (optional) If provided, the the key pair will be derived from the secret key.
- * @returns A key pair consisting of a public key and a secret key, encoded as base64 strings, to
+ * @returns A key pair consisting of a public key and a secret key, encoded as base58 strings, to
  * use for asymmetric encryption and decryption. (Note that asymmetric encryption keys cannot be
  * used for signatures, and vice versa.)
  */
@@ -15,7 +15,7 @@ function keyPair(secretKey?: Key) {
   const keyPair = secretKey
     ? nacl.box.keyPair.fromSecretKey(keyToBytes(secretKey))
     : nacl.box.keyPair()
-  return keypairToBase64(keyPair)
+  return keypairToBase58(keyPair)
 }
 
 /**
@@ -24,7 +24,7 @@ function keyPair(secretKey?: Key) {
  * @param recipientPublicKey The public key of the intended recipient
  * @param senderSecretKey The secret key of the sender (optional). If not provided, an ephemeral
  * keypair will be generated, and the public key included as metadata.
- * @returns The encrypted data, encoded in msgpack format as a base64 string
+ * @returns The encrypted data, encoded in msgpack format as a base58 string
  * @see asymmetric.decrypt
  */
 function encrypt({ secret, recipientPublicKey, senderSecretKey }: EncryptParams): string {
@@ -49,12 +49,12 @@ function encrypt({ secret, recipientPublicKey, senderSecretKey }: EncryptParams)
     keyToBytes(senderSecretKey!)
   )
   const cipherBytes = msgpack.encode({ nonce, message, senderPublicKey })
-  return base64.encode(cipherBytes)
+  return base58.encode(cipherBytes)
 }
 
 /**
  * Asymmetrically decrypts a message encrypted by `asymmetric.encrypt`.
- * @param cipher The encrypted data, encoded in msgpack format as a base64 string
+ * @param cipher The encrypted data, encoded in msgpack format as a base58 string
  * @param senderPublicKey The public key of the sender (optional). If not provided, an ephemeral
  * public key is assumed to be included in the cipher metadata.
  * @param recipientSecretKey The secret key of the recipient

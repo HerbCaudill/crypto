@@ -1,10 +1,11 @@
 import { keyToBytes } from './keyToBytes'
 
 describe('keyToBytes', () => {
-  it('converts a base64 string to bytes', () => {
-    const key = 'OH8olQvUFfxqjd+A4FkPQZq0mSb9GGKIOfuCFLDd0B0='
+  it('converts a base58 string to bytes', () => {
+    const key =
+      '5VbnBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67'
     const bytes = keyToBytes(key)
-    expect(bytes).toHaveLength(32)
+    expect(bytes).toHaveLength(64)
   })
 
   it('converts a utf8 string to bytes', () => {
@@ -14,7 +15,8 @@ describe('keyToBytes', () => {
   })
 
   it('passes through a byte array unchanged', () => {
-    const key = 'OH8olQvUFfxqjd+A4FkPQZq0mSb9GGKIOfuCFLDd0B0='
+    const key =
+      '5VbnBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67'
     const bytes = keyToBytes(key)
     expect(keyToBytes(bytes)).toEqual(bytes)
   })

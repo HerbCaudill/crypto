@@ -90,12 +90,11 @@ describe('crypto', () => {
 
   describe('keyPair', () => {
     test('is deterministic if secretKey is provided', () => {
-      const secretKey = 'Bjhq9cIEFbzxUhKHKik8EDk4Oc9kTMXqbum+Gqj+Eh4='
+      const secretKey = 'C3U7T1J7M9gvhFHkDXeWHuAko8bdHd9w1CJKsLEUCVqp'
       const keyPair = asymmetric.keyPair(secretKey)
-      expect(keyPair).toEqual({
-        secretKey,
-        publicKey: 'c69ecojC6v71m/ClVNDBaSrIJ3jKr+LHitXoCMFOxio=',
-      })
+      expect(keyPair.publicKey).toMatchInlineSnapshot(
+        `"7zXb9Juuf1vJgZp35ekyimGcWeV4krMgnk1KXAQGuFFx"`
+      )
     })
   })
 })

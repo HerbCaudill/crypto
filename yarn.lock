@@ -1142,11 +1142,6 @@
   dependencies:
     type-detect "4.0.8"
 
-"@stablelib/base64@1":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@stablelib/base64/-/base64-1.0.0.tgz#e08ba78078c731cbbb244530b1750659c52ba7cb"
-  integrity sha512-s/wTc/3+vYSalh4gfayJrupzhT7SDBqNtiYOeEMlkSDqL/8cExh5FAeTzLpmYq+7BLLv36EjBL5xrb0bUHWJWQ==
-
 "@stablelib/utf8@1":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@stablelib/utf8/-/utf8-1.0.0.tgz#7c0c039b6d154da50326003ea92777ddc8f5db2c"
@@ -1294,13 +1289,6 @@
   version "1.17.1"
   resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.17.1.tgz#3afd6ad8967c77e4376c598a82ddd58f46ec45d6"
   integrity sha512-yy7HuzQhj0dhGpD8RLXSZWEkLsV9ibvxvi6EiJ3bkqLAO1RGo0WbkWQiwpRlSFymTJRz0d3k5LM3kkx8ArDbLw==
-  dependencies:
-    "@types/node" "*"
-
-"@types/scryptsy@2":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/scryptsy/-/scryptsy-2.0.0.tgz#a9e239156c0cfc4d328dcc3803516c6789f91c44"
-  integrity sha512-iDmneBKWSsmsR3SlGisOVnpCz7sB5Mqhv4I/pLg1DYq2zttWT65r+1gOVZtoxXiTsSf/JO8NhgyCKhx7cvGbaA==
   dependencies:
     "@types/node" "*"
 
@@ -1750,6 +1738,13 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
   integrity sha1-ibTRmasr7kneFk6gK4nORi1xt2c=
+
+base-x@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.8.tgz#1e1106c2537f0162e8b52474a557ebb09000018d"
+  integrity sha512-Rl/1AWP4J/zRrk54hhlxH4drNxPJXYUaKffODVI53/dAsV4t9fBxyxYKAVPU1XBHxYwOWP9h9H0hM2MVw4YfJA==
+  dependencies:
+    safe-buffer "^5.0.1"
 
 base@^0.11.1:
   version "0.11.2"

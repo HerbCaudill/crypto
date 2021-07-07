@@ -1,8 +1,8 @@
+import nacl from 'tweetnacl'
+import { randomKey } from '.'
+import { keypairToBase58 } from './util'
 import { asymmetric } from '/asymmetric'
 import { signatures, SignedMessage } from '/signatures'
-
-import nacl from 'tweetnacl'
-import { randomKey } from './randomKey'
 
 const plaintext = 'The leopard pounces at noon'
 
@@ -11,21 +11,19 @@ describe('crypto', () => {
     const { sign, verify } = signatures
 
     const alice = {
-      publicKey: 'OH8olQvUFfxqjd+A4FkPQZq0mSb9GGKIOfuCFLDd0B0=',
-      secretKey: 'TVTqqajwDkAMlztAJEkgcnEd1KzWheaDQE6sxPGlUlY4fyiVC9QV/GqN34DgWQ9BmrSZJv0YYog5+4IUsN3QHQ==', // prettier-ignore
+      publicKey: 'CgSKNnDzHhf26V8KcmQdxquK4fWUNDRy3MA6Sqf5hSma',
+      secretKey: 'F8KpL9S5dtUutS1AUNmgPeqxVkMUWLnWdvvoiKzVo3FjvXokxhQuK5ns8ZBzgBKHvdADSDfw88TSoBVvkua7Pj2', // prettier-ignore
     }
 
-    // prettier-ignore
     const signedMessage: SignedMessage = {
-        payload: 'one if by day, two if by night',
-        signature: 'Qd9f/Xgk9QFG9nVNb/QkHqKTNF0JQCEy848m4w8UmxSRwnuomBZz6Bi8wDopz//iKwHq3ipMvA2AGAw8Oo19Dw==', // prettier-ignore
-        publicKey: alice.publicKey,
-      }
+      payload: 'one if by day, two if by night',
+      signature: '5VbnBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67', // prettier-ignore
+      publicKey: alice.publicKey,
+    }
 
     test('alice signs with her secret key', () => {
-      const { payload: content, signature: knownSignature } = signedMessage
-      const signature = sign(content, alice.secretKey)
-      expect(signature).toEqual(knownSignature)
+      const signature = sign(signedMessage.payload, alice.secretKey)
+      expect(signature).toEqual(signedMessage.signature)
     })
 
     test(`bob verifies using alice's public key`, () => {
@@ -46,11 +44,6 @@ describe('crypto', () => {
         type: 0,
         payload: { team: 'Spies Я Us' },
         user: 'alice',
-        device: {
-          id: 'seccQeheyHxM4gBmetpJOPrugu+iqS25M+fn4pp6BZ4=',
-          name: 'windows laptop',
-          type: 1,
-        },
         client: { name: 'test', version: '0' },
         timestamp: 1588335904711,
         index: 0,
@@ -88,7 +81,7 @@ describe('crypto', () => {
     })
 
     test(`fails verification if signature is wrong`, () => {
-      const badSignature = 'Iamabadbadsignature+JlhN8veVIBQ/SO4d59oLiCkEG57ZubXLsMaaNzk91ujZjXkS9doP2vCAFimKvKdgjy==' // prettier-ignore
+      const badSignature = '5VanBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67' // prettier-ignore
       const badMessage = {
         ...signedMessage,
         signature: badSignature,
@@ -98,7 +91,7 @@ describe('crypto', () => {
     })
 
     test(`fails verification if public key is wrong`, () => {
-      const badKey = 'NachoKeySb9GGKIOfuCFLDd0B0OH8olQvUFfxqjd+A4='
+      const badKey = 'AAAAAnDzHhf26V8KcmQdxquK4fWUNDRy3MA6Sqf5hSma'
       const badMessage = {
         ...signedMessage,
         publicKey: badKey,
@@ -113,13 +106,14 @@ describe('crypto', () => {
     })
 
     test('keypair generated from seed is deterministic', () => {
-      const seed = '50ieozWliq3vhJyP6SHLdRYh0NRnrED7bzPXELKERtk'
+      const seed = 'CgSKNnDzHhf26V8KcmQdxquK4fWUNDRy3MA6Sqf5hSma'
       const keys = signatures.keyPair(seed)
-      expect(keys).toEqual({
-        publicKey: 'LW3aDMjZ79w075KlqhRRXW0bIO8+o2pi13lXeg1IW5Y=',
-        secretKey:
-          '50ieozWliq3vhJyP6SHLdRYh0NRnrED7bzPXELKERtktbdoMyNnv3DTvkqWqFFFdbRsg7z6jamLXeVd6DUhblg==',
-      })
+      expect(keys).toMatchInlineSnapshot(`
+        Object {
+          "publicKey": "4fzpin2ZYHRujbbub1ibVxny29EQS2G26nWBkSsDAcRU",
+          "secretKey": "4UExdSFxP5AWWqnFbqQTDvwA5s1nnpFCPsWDeyAXYMCAnmP3SaFYxHvbaHn2QMpvKYwrZ4vzhg5Dv9qr2tD2Jmga",
+        }
+      `)
     })
   })
 })

@@ -1,6 +1,6 @@
 {
   "name": "@herbcaudill/crypto",
-  "version": "0.1.14",
+  "version": "0.1.13",
   "license": "MIT",
   "private": false,
   "author": {
@@ -11,10 +11,7 @@
   "main": "dist/index.js",
   "module": "dist/crypto.esm.js",
   "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "files": ["dist", "src"],
   "engines": {
     "node": ">=10"
   },
@@ -26,7 +23,6 @@
   },
   "dependencies": {
     "@stablelib/utf8": "1",
-    "base-x": "^3.0.8",
     "json-stable-stringify": "1",
     "msgpack-lite": "0",
     "scrypt-js": "^3.0.1",
