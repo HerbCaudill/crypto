@@ -1,4 +1,4 @@
-﻿import { base58 } from '/util'
+﻿import { base58 } from './base58'
 import nacl from 'tweetnacl'
 
 export const keypairToBase58 = (keypair: nacl.BoxKeyPair | nacl.SignKeyPair) => ({

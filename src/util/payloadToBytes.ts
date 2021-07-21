@@ -1,6 +1,6 @@
 ﻿import stringify from 'json-stable-stringify'
-import { Payload } from '/util/types'
-import { utf8 } from '/util/utf8'
+import { Payload } from './types'
+import { utf8 } from './utf8'
 
 /** Takes either a string, a byte array, or a javascript object, and returns it as a byte array */
 export const payloadToBytes = (x: Payload): Uint8Array =>
