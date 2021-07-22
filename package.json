@@ -1,6 +1,6 @@
 {
   "name": "@herbcaudill/crypto",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "private": false,
   "author": {
@@ -37,7 +37,9 @@
     "@herbcaudill/tscpaths": "0",
     "@types/json-stable-stringify": "1",
     "@types/msgpack-lite": "0",
+    "@types/node": "^16.4.0",
     "prettier": "2",
+    "ts-jest": "^27.0.3",
     "tsdx": "0",
     "tslib": "1",
     "typescript": "3",
