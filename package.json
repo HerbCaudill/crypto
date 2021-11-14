@@ -41,6 +41,7 @@
     "@types/msgpack-lite": "0",
     "@types/node": "16",
     "prettier": "2",
+    "jest": "27",
     "ts-jest": "27",
     "tsdx": "0",
     "tslib": "1",

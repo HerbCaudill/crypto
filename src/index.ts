@@ -1,7 +1,7 @@
 ﻿import _sodium from 'libsodium-wrappers'
 import msgpack from 'msgpack-lite'
 import { DecryptParams, Encoder, EncryptParams, Key, Payload, SignedMessage } from '/types'
-import { base58, keypairToBase58, keyToBytes, payloadToBytes, utf8 } from '/util'
+import { base58, keypairToBase58, keyToBytes, payloadToBytes, utf8 } from './util'
 
 export const initCrypto = async () => {
   await _sodium.ready
@@ -74,7 +74,6 @@ export const initCrypto = async () => {
           keyToBytes(senderPublicKey!),
           keyToBytes(recipientSecretKey)
         )
-        if (!decrypted) throw new Error('Could not decrypt message')
         return utf8.decode(decrypted)
       },
     },
@@ -118,7 +117,6 @@ export const initCrypto = async () => {
         const { nonce, message } = msgpack.decode(cipherBytes)
 
         const decrypted = sodium.crypto_secretbox_open_easy(message, nonce, key)
-        if (!decrypted) throw new Error('Could not decrypt message')
         return utf8.decode(decrypted)
       },
     },
@@ -189,7 +187,10 @@ export const initCrypto = async () => {
       seed: Key,
       /** The data to hash. */
       payload: Payload
-    ) => base58.encode(sodium.crypto_generichash(32, payloadToBytes(payload), keyToBytes(seed))),
+    ) =>
+      base58.encode(
+        sodium.crypto_generichash(32, payloadToBytes(payload), keyToBytes(seed, 'utf8'))
+      ),
 
     /** Returns an unpredictable key with the given length (32 bytes by default).*/
     randomKey: (length: number = 32, encoder: Encoder = base58.encode) =>

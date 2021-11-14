@@ -1,5 +1,5 @@
 import { initCrypto } from '..'
-import { keyToBytes } from '/util/keyToBytes'
+import { keyToBytes } from '../util'
 
 describe('randomKey', () => {
   it('should return keys of the expected length', async () => {

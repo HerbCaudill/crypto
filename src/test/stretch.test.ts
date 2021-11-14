@@ -1,5 +1,5 @@
 import { initCrypto } from '..'
-import { base58, keyToBytes } from '/util'
+import { base58, keyToBytes } from '../util'
 
 describe('stretch', () => {
   test('returns a 32-byte key', async () => {
