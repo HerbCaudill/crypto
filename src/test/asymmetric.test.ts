@@ -1,20 +1,18 @@
-﻿import { randomKey } from './randomKey'
-import { asymmetric } from '/asymmetric'
-import { signatures } from '/signatures'
-
-const { encrypt, decrypt } = asymmetric
+﻿import { initCrypto } from '..'
 
 const plaintext = 'The leopard pounces at noon'
 const zalgoText = 'ẓ̴̇a̷̰̚l̶̥͑g̶̼͂o̴̅͜ ̸̻̏í̴͜s̵̜͠ ̴̦̃u̸̼̎p̵̘̔o̵̦͑ǹ̵̰ ̶̢͘u̵̇ͅș̷̏'
 const poop = '💩'
-const json = JSON.stringify(require('../package.json'))
+const json = JSON.stringify(require('../../package.json'))
 
 describe('crypto', () => {
-  describe('asymmetric encrypt/decrypt', () => {
-    const alice = asymmetric.keyPair()
-    const bob = asymmetric.keyPair()
-    const eve = asymmetric.keyPair()
+  const setup = async () => {
+    const crypto = await initCrypto()
+    const { keyPair, encrypt, decrypt } = crypto.asymmetric
+    return { keyPair, encrypt, decrypt }
+  }
 
+  describe('asymmetric encrypt/decrypt', () => {
     test.each`
       label                 | message
       ${'plain text'}       | ${plaintext}
@@ -22,7 +20,12 @@ describe('crypto', () => {
       ${'emoji message'}    | ${poop}
       ${'stringified json'} | ${json}
       ${'zalgo text'}       | ${zalgoText}
-    `('round trip: $label', ({ message }) => {
+    `('round trip: $label', async ({ message }) => {
+      const { keyPair, encrypt, decrypt } = await setup()
+      const alice = keyPair()
+      const bob = keyPair()
+      const eve = keyPair()
+
       const encrypted = encrypt({
         secret: message,
         recipientPublicKey: bob.publicKey,
@@ -44,11 +47,12 @@ describe('crypto', () => {
       expect(attemptToDecrypt).toThrow()
     })
 
-    test('fwiw: cannot use signature keys to encrypt', () => {
-      const a = signatures.keyPair()
-      const b = signatures.keyPair()
+    test('fwiw: cannot use signature keys to encrypt', async () => {
+      const crypto = await initCrypto()
+      const a = crypto.signature.keyPair()
+      const b = crypto.signature.keyPair()
       expect(() =>
-        encrypt({
+        crypto.asymmetric.encrypt({
           secret: plaintext,
           recipientPublicKey: b.publicKey,
           senderSecretKey: a.secretKey,
@@ -58,9 +62,6 @@ describe('crypto', () => {
   })
 
   describe('asymmetric encrypt/decrypt with ephemeral key', () => {
-    const bob = asymmetric.keyPair()
-    const eve = asymmetric.keyPair()
-
     test.each`
       label                 | message
       ${'plain text'}       | ${plaintext}
@@ -68,7 +69,11 @@ describe('crypto', () => {
       ${'emoji message'}    | ${poop}
       ${'stringified json'} | ${json}
       ${'zalgo text'}       | ${zalgoText}
-    `('round trip: $label', ({ message }) => {
+    `('round trip: $label', async ({ message }) => {
+      const { keyPair, encrypt, decrypt } = await setup()
+      const bob = keyPair()
+      const eve = keyPair()
+
       const encrypted = encrypt({
         secret: message,
         recipientPublicKey: bob.publicKey,
@@ -89,12 +94,11 @@ describe('crypto', () => {
   })
 
   describe('keyPair', () => {
-    test('is deterministic if secretKey is provided', () => {
+    test('is deterministic if secretKey is provided', async () => {
+      const { keyPair } = await setup()
       const secretKey = 'C3U7T1J7M9gvhFHkDXeWHuAko8bdHd9w1CJKsLEUCVqp'
-      const keyPair = asymmetric.keyPair(secretKey)
-      expect(keyPair.publicKey).toMatchInlineSnapshot(
-        `"7zXb9Juuf1vJgZp35ekyimGcWeV4krMgnk1KXAQGuFFx"`
-      )
+      const keys = keyPair(secretKey)
+      expect(keys.publicKey).toMatchInlineSnapshot(`"EfFBJCqTouk4ZFTzCwaES9MbJLe76xsH7obYzQzE4uHG"`)
     })
   })
 })

@@ -1,6 +1,5 @@
-export * from './base58'
+export * from '/util/base58'
 export * from '/util/keypairToBase58'
 export * from '/util/keyToBytes'
 export * from '/util/payloadToBytes'
-export * from '/util/types'
 export * from '/util/utf8'

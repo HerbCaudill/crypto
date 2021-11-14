@@ -1,5 +1,5 @@
 ﻿import stringify from 'json-stable-stringify'
-import { Payload } from './types'
+import { Payload } from '../types'
 import { utf8 } from './utf8'
 
 /** Takes either a string, a byte array, or a javascript object, and returns it as a byte array */
