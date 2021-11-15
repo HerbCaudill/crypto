@@ -1,11 +1,10 @@
-import { initCrypto } from '..'
+import { stretch } from '..'
 import { base58, keyToBytes } from '../util'
 
 describe('stretch', () => {
-  test('returns a 32-byte key', async () => {
-    const crypto = await initCrypto()
+  test('returns a 32-byte key', () => {
     const password = 'hello123'
-    const key = crypto.stretch(password)
+    const key = stretch(password)
 
     expect(key).toHaveLength(32)
 
@@ -15,10 +14,9 @@ describe('stretch', () => {
     )
   })
 
-  test('takes a byte array as as password', async () => {
-    const crypto = await initCrypto()
+  test('takes a byte array as as password', () => {
     const password = keyToBytes('5VbnBW')
-    const key = crypto.stretch(password)
+    const key = stretch(password)
 
     // results are deterministic
     expect(base58.encode(key)).toMatchInlineSnapshot(

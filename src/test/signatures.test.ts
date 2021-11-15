@@ -1,36 +1,30 @@
-import { initCrypto } from '..'
+import { randomKey, signatures, asymmetric } from '..'
 import { SignedMessage } from '/types'
 
-describe('crypto', () => {
-  const setup = async () => {
-    const crypto = await initCrypto()
-    const { randomKey } = crypto
-    const { keyPair, sign, verify } = crypto.signatures
-    const alice = keyPair('alice')
-    return { alice, keyPair, sign, verify, randomKey }
-  }
+const { keyPair, sign, verify } = signatures
 
+describe('crypto', () => {
   describe('signatures', () => {
     const payload = 'one if by day, two if by night'
 
-    test('alice signs with her secret key', async () => {
-      const { alice, sign } = await setup()
+    test('alice signs with her secret key', () => {
+      const alice = keyPair('alice')
       const signature = sign(payload, alice.secretKey)
       expect(signature).toMatchInlineSnapshot(
         `"3cEJfYLP3eRx4yVjaxuyMy2rxpVvmT5Hh7knm4Vwz53mv1HWcU3o2m4R2Tu7p1XEfJUcske3i5XNXUDgDnDRmGSa"`
       )
     })
 
-    test(`bob verifies using alice's public key`, async () => {
-      const { alice, sign, verify } = await setup()
+    test(`bob verifies using alice's public key`, () => {
+      const alice = keyPair('alice')
       const signature = sign(payload, alice.secretKey)
       const { publicKey } = alice
       const isLegit = verify({ payload, signature, publicKey })
       expect(isLegit).toBe(true)
     })
 
-    test(`round trip with bytes payload`, async () => {
-      const { alice, sign, verify, randomKey } = await setup()
+    test(`round trip with bytes payload`, () => {
+      const alice = keyPair('alice')
       const payload = randomKey()
       const { secretKey, publicKey } = alice
       const signature = sign(payload, secretKey)
@@ -38,7 +32,7 @@ describe('crypto', () => {
       expect(isLegit).toBe(true)
     })
 
-    test(`round trip with JSON payload`, async () => {
+    test(`round trip with JSON payload`, () => {
       const payload = {
         type: 0,
         payload: { team: 'Spies Я Us' },
@@ -48,17 +42,17 @@ describe('crypto', () => {
         index: 0,
         prev: undefined,
       }
-      const { alice, sign, verify } = await setup()
+      const alice = keyPair('alice')
       const { secretKey, publicKey } = alice
       const signature = sign(payload, secretKey)
       const isLegit = verify({ payload, signature, publicKey })
       expect(isLegit).toBe(true)
     })
 
-    test(`JSON normalization`, async () => {
+    test(`JSON normalization`, () => {
       const payload = { a: 1, b: 2, c: 3 }
       const scrambled = { b: 2, a: 1, c: 3 }
-      const { alice, sign, verify } = await setup()
+      const alice = keyPair('alice')
 
       const { secretKey, publicKey } = alice
       const signature = sign(scrambled, secretKey)
@@ -66,9 +60,9 @@ describe('crypto', () => {
       expect(isLegit).toBe(true)
     })
 
-    test(`Eve tampers with the message, but Bob is not fooled`, async () => {
+    test(`Eve tampers with the message, but Bob is not fooled`, () => {
       // Alice signs a message
-      const { alice, sign, verify } = await setup()
+      const alice = keyPair('alice')
       const signedMessage: SignedMessage = {
         payload,
         signature: sign(payload, alice.secretKey),
@@ -89,8 +83,8 @@ describe('crypto', () => {
       expect(isLegit).toBe(false)
     })
 
-    test(`fails verification if signature is wrong`, async () => {
-      const { alice, sign, verify } = await setup()
+    test(`fails verification if signature is wrong`, () => {
+      const alice = keyPair('alice')
       const signedMessage: SignedMessage = {
         payload,
         signature: sign(payload, alice.secretKey),
@@ -106,8 +100,8 @@ describe('crypto', () => {
       expect(isLegit).toBe(false)
     })
 
-    test(`fails verification if public key is wrong`, async () => {
-      const { alice, sign, verify } = await setup()
+    test(`fails verification if public key is wrong`, () => {
+      const alice = keyPair('alice')
       const signedMessage: SignedMessage = {
         payload,
         signature: sign(payload, alice.secretKey),
@@ -122,17 +116,15 @@ describe('crypto', () => {
       expect(isLegit).toBe(false)
     })
 
-    test('fwiw: cannot use encryption keys to sign', async () => {
-      const crypto = await initCrypto()
-      const keysForAnotherPurpose = crypto.asymmetric.keyPair()
+    test('fwiw: cannot use encryption keys to sign', () => {
+      const keysForAnotherPurpose = asymmetric.keyPair()
       const tryToSignWithEncryptionKeys = () =>
-        crypto.signatures.sign(payload, keysForAnotherPurpose.secretKey)
+        signatures.sign(payload, keysForAnotherPurpose.secretKey)
       expect(tryToSignWithEncryptionKeys).toThrow()
     })
 
-    test('keypair generated from seed is deterministic', async () => {
+    test('keypair generated from seed is deterministic', () => {
       // Alice signs a message
-      const { keyPair } = await setup()
       const seed = 'passw0rd'
       const keys = keyPair(seed)
       expect(keys).toMatchInlineSnapshot(`

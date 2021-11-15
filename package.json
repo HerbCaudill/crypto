@@ -8,6 +8,7 @@
     "email": "herb@devresults.com"
   },
   "description": "Wrapper functions for TweetNaCl",
+  "type": "module",
   "main": "dist/index.js",
   "module": "dist/crypto.esm.js",
   "typings": "dist/index.d.ts",
@@ -23,7 +24,7 @@
     "postbuild": "tscpaths -p tsconfig.json -s ./src -o ./dist --silent",
     "prepare": "npm run build",
     "start": "tsdx watch",
-    "test": "tsdx test"
+    "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@stablelib/utf8": "1",
@@ -40,13 +41,28 @@
     "@types/json-stable-stringify": "1",
     "@types/msgpack-lite": "0",
     "@types/node": "16",
-    "prettier": "2",
     "jest": "27",
+    "prettier": "2",
     "ts-jest": "27",
     "tsdx": "0",
     "tslib": "1",
-    "typescript": "3",
+    "typescript": "4",
     "v8-profiler-node8": "6"
+  },
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "globals": {
+      "tsconfig": {
+        "module": "esnext",
+        "target": "es2022"
+      },
+      "ts-jest": {
+        "useESM": true
+      }
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    }
   },
   "prettier": {
     "printWidth": 100,
