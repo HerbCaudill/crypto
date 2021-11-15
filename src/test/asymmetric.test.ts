@@ -1,4 +1,4 @@
-﻿import { initCrypto } from '..'
+﻿8import { initCrypto } from '..'
 
 const plaintext = 'The leopard pounces at noon'
 const zalgoText = 'ẓ̴̇a̷̰̚l̶̥͑g̶̼͂o̴̅͜ ̸̻̏í̴͜s̵̜͠ ̴̦̃u̸̼̎p̵̘̔o̵̦͑ǹ̵̰ ̶̢͘u̵̇ͅș̷̏'
@@ -49,8 +49,8 @@ describe('crypto', () => {
 
     test('fwiw: cannot use signature keys to encrypt', async () => {
       const crypto = await initCrypto()
-      const a = crypto.signature.keyPair()
-      const b = crypto.signature.keyPair()
+      const a = crypto.signatures.keyPair()
+      const b = crypto.signatures.keyPair()
       expect(() =>
         crypto.asymmetric.encrypt({
           secret: plaintext,
