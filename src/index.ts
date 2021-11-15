@@ -3,6 +3,7 @@ import msgpack from 'msgpack-lite'
 import { DecryptParams, Encoder, EncryptParams, Key, Payload, SignedMessage } from '/types'
 import { base58, keypairToBase58, keyToBytes, payloadToBytes, utf8 } from './util'
 
+/**  Wrappers of some NaCl crypto functions, accepting and returning base58 strings rather than byte  arrays. */
 export const initCrypto = async () => {
   await _sodium.ready
   const sodium = _sodium
@@ -78,12 +79,6 @@ export const initCrypto = async () => {
       },
     },
 
-    /**
-     * Wrappers of NaCl symmetric crypto functions, accepting and returning base58 strings rather than
-     * byte arrays. The symmetric `encrypt` and `decrypt` functions can take passwords instead of
-     * 32-byte keys; the password is expanded using the [scrypt](https://en.wikipedia.org/wiki/Scrypt)
-     * algorithm.
-     */
     symmetric: {
       /**
        * Symmetrically encrypts a string of text (or utf8-encoded byte array).
@@ -106,7 +101,7 @@ export const initCrypto = async () => {
       /**
        * Symmetrically decrypts a message encrypted by `symmetric.encrypt`.
        * @param cipher The encrypted data in msgpack format
-       * @param password The password used as a seed for an encryption key
+       * @param password The password or key used to encrypt
        * @returns The original plaintext
        * @see symmetric.encrypt
        */
@@ -120,8 +115,7 @@ export const initCrypto = async () => {
         return utf8.decode(decrypted)
       },
     },
-
-    signature: {
+    signatures: {
       /**
        * @returns A key pair consisting of a public key and a secret key, encoded as base58 strings, to
        * use for signing and verifying messages. (Note that signature keys cannot be used for asymmetric
