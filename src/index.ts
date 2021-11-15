@@ -1,6 +1,6 @@
 ﻿import sodium from 'libsodium-wrappers'
 import msgpack from 'msgpack-lite'
-import { DecryptParams, Encoder, EncryptParams, Key, Payload, SignedMessage } from '/types'
+import { DecryptParams, Encoder, EncryptParams, Key, Payload, SignedMessage } from './types'
 import { base58, keypairToBase58, keyToBytes, payloadToBytes, utf8 } from './util'
 
 await sodium.ready

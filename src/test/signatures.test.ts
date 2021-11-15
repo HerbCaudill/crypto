@@ -1,5 +1,5 @@
 import { randomKey, signatures, asymmetric } from '..'
-import { SignedMessage } from '/types'
+import { SignedMessage } from '../types'
 
 const { keyPair, sign, verify } = signatures
 
