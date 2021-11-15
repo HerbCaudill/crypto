@@ -5,7 +5,7 @@ describe('crypto', () => {
   const setup = async () => {
     const crypto = await initCrypto()
     const { randomKey } = crypto
-    const { keyPair, sign, verify } = crypto.signature
+    const { keyPair, sign, verify } = crypto.signatures
     const alice = keyPair('alice')
     return { alice, keyPair, sign, verify, randomKey }
   }
@@ -125,8 +125,9 @@ describe('crypto', () => {
     test('fwiw: cannot use encryption keys to sign', async () => {
       const crypto = await initCrypto()
       const keysForAnotherPurpose = crypto.asymmetric.keyPair()
-      const { sign } = crypto.signature
-      expect(() => sign(payload, keysForAnotherPurpose.secretKey)).toThrow()
+      const tryToSignWithEncryptionKeys = () =>
+        crypto.signatures.sign(payload, keysForAnotherPurpose.secretKey)
+      expect(tryToSignWithEncryptionKeys).toThrow()
     })
 
     test('keypair generated from seed is deterministic', async () => {
