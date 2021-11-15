@@ -161,9 +161,12 @@ export const signatures = {
 /** Derives a key from a low-entropy input, such as a password. Current version of libsodium
  * uses the Argon2id algorithm, although that may change in later versions. */
 export const stretch = (password: Key) => {
-  const passwordBytes = keyToBytes(password, 'utf8')
-  if (password.length >= 32) return passwordBytes.slice(0, 32)
+  const passwordBytes =
+    typeof password === 'string'
+      ? keyToBytes(password, base58.detect(password) ? 'base58' : 'utf8')
+      : password
   const salt = base58.decode('H5B4DLSXw5xwNYFdz1Wr6e')
+  if (passwordBytes.length >= 16) return sodium.crypto_generichash(32, passwordBytes, salt) // it's long enough -- just hash to expand it to 32 bytes
   return sodium.crypto_pwhash(
     32,
     passwordBytes,

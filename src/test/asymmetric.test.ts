@@ -86,7 +86,7 @@ describe('crypto', () => {
     test('is deterministic if secretKey is provided', () => {
       const secretKey = 'C3U7T1J7M9gvhFHkDXeWHuAko8bdHd9w1CJKsLEUCVqp'
       const keys = keyPair(secretKey)
-      expect(keys.publicKey).toMatchInlineSnapshot(`"EfFBJCqTouk4ZFTzCwaES9MbJLe76xsH7obYzQzE4uHG"`)
+      expect(keys.publicKey).toMatchInlineSnapshot(`"5gTFPqj34hU2g57uXRWvANQTKRdhuHhREzQqxpwjVLaz"`)
     })
   })
 })

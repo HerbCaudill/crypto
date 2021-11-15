@@ -3,6 +3,18 @@ import { keyToBytes } from './keyToBytes'
 import { payloadToBytes } from './payloadToBytes'
 import { base58 } from './base58'
 
+describe('base58', () => {
+  describe('detect', () => {
+    it('recognizes a base58 string', () => {
+      expect(base58.detect('5VbnBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3z1eKYnnG3KSHtCD67')).toBe(true)
+    })
+
+    it('doesnt recognize a non-base58 string', () => {
+      expect(base58.detect('1 can be confused with I and l')).toBe(false)
+    })
+  })
+})
+
 describe('keyToBytes', () => {
   it('converts a base58 string to bytes', () => {
     const key =
