@@ -9,6 +9,7 @@ export const base58 = {
     const b = _base58.decode(s)
     return bufferToArray(b)
   },
+  detect: (s: string) => /^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$/.test(s),
 }
 
 // https://stackoverflow.com/a/31394257/239663

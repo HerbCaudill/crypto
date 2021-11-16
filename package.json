@@ -1,49 +1,66 @@
 {
   "name": "@herbcaudill/crypto",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "license": "MIT",
   "private": false,
   "author": {
     "name": "Herb Caudill",
     "email": "herb@devresults.com"
   },
-  "description": "Wrapper functions for TweetNaCl",
-  "main": "dist/index.js",
-  "module": "dist/crypto.esm.js",
-  "typings": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
+  "description": "Wrapper functions for libsodium",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "scripts": {
-    "build": "tsdx build",
-    "postbuild": "tscpaths -p tsconfig.json -s ./src -o ./dist --silent",
-    "prepare": "npm run build",
-    "start": "tsdx watch",
-    "test": "tsdx test"
+    "build": "tsc --outDir dist",
+    "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "@stablelib/utf8": "1",
-    "base-x": "^3.0.8",
+    "base-x": "3",
     "json-stable-stringify": "1",
-    "msgpack-lite": "0",
-    "scrypt-js": "^3.0.1",
-    "tweetnacl": "1"
+    "libsodium-wrappers": "0",
+    "msgpack-lite": "0"
   },
   "devDependencies": {
-    "@herbcaudill/tscpaths": "0",
+    "@types/libsodium-wrappers": "0",
+    "@types/jest": "27",
     "@types/json-stable-stringify": "1",
     "@types/msgpack-lite": "0",
-    "@types/node": "^16.4.0",
+    "@types/node": "16",
+    "esbuild": "0",
+    "jest": "27",
     "prettier": "2",
-    "ts-jest": "^27.0.3",
-    "tsdx": "0",
+    "ts-jest": "27",
     "tslib": "1",
-    "typescript": "3",
-    "v8-profiler-node8": "6"
+    "typescript": "4"
+  },
+  "jest": {
+    "transform": {},
+    "preset": "ts-jest/presets/default-esm",
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    }
+  },
+  "wallaby": {
+    "autoDetect": true,
+    "runMode": "onsave",
+    "slowTestThreshold": 1000,
+    "lowCoverageThreshold": 99,
+    "hints": {
+      "ignoreCoverageForFile": "/ignore file coverage/"
+    },
+    "env": {
+      "type": "node",
+      "params": {
+        "runner": "--experimental-vm-modules"
+      }
+    }
   },
   "prettier": {
     "printWidth": 100,

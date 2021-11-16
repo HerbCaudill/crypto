@@ -1,28 +1,23 @@
-﻿import { randomKey } from './randomKey'
-import { asymmetric } from '/asymmetric'
-import { signatures } from '/signatures'
-
-const { encrypt, decrypt } = asymmetric
+﻿import { signatures, asymmetric } from '..'
+const { keyPair, encrypt, decrypt } = asymmetric
 
 const plaintext = 'The leopard pounces at noon'
 const zalgoText = 'ẓ̴̇a̷̰̚l̶̥͑g̶̼͂o̴̅͜ ̸̻̏í̴͜s̵̜͠ ̴̦̃u̸̼̎p̵̘̔o̵̦͑ǹ̵̰ ̶̢͘u̵̇ͅș̷̏'
 const poop = '💩'
-const json = JSON.stringify(require('../package.json'))
 
 describe('crypto', () => {
   describe('asymmetric encrypt/decrypt', () => {
-    const alice = asymmetric.keyPair()
-    const bob = asymmetric.keyPair()
-    const eve = asymmetric.keyPair()
-
     test.each`
-      label                 | message
-      ${'plain text'}       | ${plaintext}
-      ${'empty string'}     | ${''}
-      ${'emoji message'}    | ${poop}
-      ${'stringified json'} | ${json}
-      ${'zalgo text'}       | ${zalgoText}
+      label              | message
+      ${'plain text'}    | ${plaintext}
+      ${'empty string'}  | ${''}
+      ${'emoji message'} | ${poop}
+      ${'zalgo text'}    | ${zalgoText}
     `('round trip: $label', ({ message }) => {
+      const alice = keyPair()
+      const bob = keyPair()
+      const eve = keyPair()
+
       const encrypted = encrypt({
         secret: message,
         recipientPublicKey: bob.publicKey,
@@ -48,7 +43,7 @@ describe('crypto', () => {
       const a = signatures.keyPair()
       const b = signatures.keyPair()
       expect(() =>
-        encrypt({
+        asymmetric.encrypt({
           secret: plaintext,
           recipientPublicKey: b.publicKey,
           senderSecretKey: a.secretKey,
@@ -58,17 +53,16 @@ describe('crypto', () => {
   })
 
   describe('asymmetric encrypt/decrypt with ephemeral key', () => {
-    const bob = asymmetric.keyPair()
-    const eve = asymmetric.keyPair()
-
     test.each`
-      label                 | message
-      ${'plain text'}       | ${plaintext}
-      ${'empty string'}     | ${''}
-      ${'emoji message'}    | ${poop}
-      ${'stringified json'} | ${json}
-      ${'zalgo text'}       | ${zalgoText}
+      label              | message
+      ${'plain text'}    | ${plaintext}
+      ${'empty string'}  | ${''}
+      ${'emoji message'} | ${poop}
+      ${'zalgo text'}    | ${zalgoText}
     `('round trip: $label', ({ message }) => {
+      const bob = keyPair()
+      const eve = keyPair()
+
       const encrypted = encrypt({
         secret: message,
         recipientPublicKey: bob.publicKey,
@@ -91,10 +85,8 @@ describe('crypto', () => {
   describe('keyPair', () => {
     test('is deterministic if secretKey is provided', () => {
       const secretKey = 'C3U7T1J7M9gvhFHkDXeWHuAko8bdHd9w1CJKsLEUCVqp'
-      const keyPair = asymmetric.keyPair(secretKey)
-      expect(keyPair.publicKey).toMatchInlineSnapshot(
-        `"7zXb9Juuf1vJgZp35ekyimGcWeV4krMgnk1KXAQGuFFx"`
-      )
+      const keys = keyPair(secretKey)
+      expect(keys.publicKey).toMatchInlineSnapshot(`"5gTFPqj34hU2g57uXRWvANQTKRdhuHhREzQqxpwjVLaz"`)
     })
   })
 })

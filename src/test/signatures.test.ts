@@ -1,38 +1,31 @@
-import nacl from 'tweetnacl'
-import { randomKey } from '.'
-import { keypairToBase58 } from './util'
-import { asymmetric } from '/asymmetric'
-import { signatures, SignedMessage } from '/signatures'
+import { randomKey, signatures, asymmetric } from '..'
+import { SignedMessage } from '../types'
 
-const plaintext = 'The leopard pounces at noon'
+const { keyPair, sign, verify } = signatures
 
 describe('crypto', () => {
   describe('signatures', () => {
-    const { sign, verify } = signatures
-
-    const alice = {
-      publicKey: 'CgSKNnDzHhf26V8KcmQdxquK4fWUNDRy3MA6Sqf5hSma',
-      secretKey: 'F8KpL9S5dtUutS1AUNmgPeqxVkMUWLnWdvvoiKzVo3FjvXokxhQuK5ns8ZBzgBKHvdADSDfw88TSoBVvkua7Pj2', // prettier-ignore
-    }
-
-    const signedMessage: SignedMessage = {
-      payload: 'one if by day, two if by night',
-      signature: '5VbnBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67', // prettier-ignore
-      publicKey: alice.publicKey,
-    }
+    const payload = 'one if by day, two if by night'
 
     test('alice signs with her secret key', () => {
-      const signature = sign(signedMessage.payload, alice.secretKey)
-      expect(signature).toEqual(signedMessage.signature)
+      const alice = keyPair('alice')
+      const signature = sign(payload, alice.secretKey)
+      expect(signature).toMatchInlineSnapshot(
+        `"3cEJfYLP3eRx4yVjaxuyMy2rxpVvmT5Hh7knm4Vwz53mv1HWcU3o2m4R2Tu7p1XEfJUcske3i5XNXUDgDnDRmGSa"`
+      )
     })
 
     test(`bob verifies using alice's public key`, () => {
-      const isLegit = verify(signedMessage)
+      const alice = keyPair('alice')
+      const signature = sign(payload, alice.secretKey)
+      const { publicKey } = alice
+      const isLegit = verify({ payload, signature, publicKey })
       expect(isLegit).toBe(true)
     })
 
     test(`round trip with bytes payload`, () => {
-      const payload = nacl.randomBytes(32)
+      const alice = keyPair('alice')
+      const payload = randomKey()
       const { secretKey, publicKey } = alice
       const signature = sign(payload, secretKey)
       const isLegit = verify({ payload, signature, publicKey })
@@ -49,6 +42,7 @@ describe('crypto', () => {
         index: 0,
         prev: undefined,
       }
+      const alice = keyPair('alice')
       const { secretKey, publicKey } = alice
       const signature = sign(payload, secretKey)
       const isLegit = verify({ payload, signature, publicKey })
@@ -58,6 +52,7 @@ describe('crypto', () => {
     test(`JSON normalization`, () => {
       const payload = { a: 1, b: 2, c: 3 }
       const scrambled = { b: 2, a: 1, c: 3 }
+      const alice = keyPair('alice')
 
       const { secretKey, publicKey } = alice
       const signature = sign(scrambled, secretKey)
@@ -66,8 +61,16 @@ describe('crypto', () => {
     })
 
     test(`Eve tampers with the message, but Bob is not fooled`, () => {
-      // Eve
-      const tamperedContent = (signedMessage.payload as string)
+      // Alice signs a message
+      const alice = keyPair('alice')
+      const signedMessage: SignedMessage = {
+        payload,
+        signature: sign(payload, alice.secretKey),
+        publicKey: alice.publicKey,
+      }
+
+      // Eve tampers with the contents of the message
+      const tamperedContent = payload //
         .replace('one', 'forty-two')
         .replace('two', 'seventy-twelve')
       const tamperedMessage = {
@@ -75,12 +78,19 @@ describe('crypto', () => {
         payload: tamperedContent,
       }
 
-      // Bob
+      // Bob is not fooled
       const isLegit = verify(tamperedMessage)
       expect(isLegit).toBe(false)
     })
 
     test(`fails verification if signature is wrong`, () => {
+      const alice = keyPair('alice')
+      const signedMessage: SignedMessage = {
+        payload,
+        signature: sign(payload, alice.secretKey),
+        publicKey: alice.publicKey,
+      }
+
       const badSignature = '5VanBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67' // prettier-ignore
       const badMessage = {
         ...signedMessage,
@@ -91,6 +101,12 @@ describe('crypto', () => {
     })
 
     test(`fails verification if public key is wrong`, () => {
+      const alice = keyPair('alice')
+      const signedMessage: SignedMessage = {
+        payload,
+        signature: sign(payload, alice.secretKey),
+        publicKey: alice.publicKey,
+      }
       const badKey = 'AAAAAnDzHhf26V8KcmQdxquK4fWUNDRy3MA6Sqf5hSma'
       const badMessage = {
         ...signedMessage,
@@ -101,17 +117,20 @@ describe('crypto', () => {
     })
 
     test('fwiw: cannot use encryption keys to sign', () => {
-      const a = asymmetric.keyPair()
-      expect(() => sign(plaintext, a.secretKey)).toThrow()
+      const keysForAnotherPurpose = asymmetric.keyPair()
+      const tryToSignWithEncryptionKeys = () =>
+        signatures.sign(payload, keysForAnotherPurpose.secretKey)
+      expect(tryToSignWithEncryptionKeys).toThrow()
     })
 
     test('keypair generated from seed is deterministic', () => {
-      const seed = 'CgSKNnDzHhf26V8KcmQdxquK4fWUNDRy3MA6Sqf5hSma'
-      const keys = signatures.keyPair(seed)
+      // Alice signs a message
+      const seed = 'passw0rd'
+      const keys = keyPair(seed)
       expect(keys).toMatchInlineSnapshot(`
         Object {
-          "publicKey": "4fzpin2ZYHRujbbub1ibVxny29EQS2G26nWBkSsDAcRU",
-          "secretKey": "4UExdSFxP5AWWqnFbqQTDvwA5s1nnpFCPsWDeyAXYMCAnmP3SaFYxHvbaHn2QMpvKYwrZ4vzhg5Dv9qr2tD2Jmga",
+          "publicKey": "BWWvjmQtJKHNMKqENTPDjjHzme33TmyXLxi7hXzMQyDk",
+          "secretKey": "34ZMB3SxAtAYabMGG9bfMppTP9FXJxSWb9n8RLRVDHt6hTiaSvXMeB7fNri5ZAh8BKBoGsUNBXwtUgTcZCnqMypv",
         }
       `)
     })

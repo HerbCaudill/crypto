@@ -13,12 +13,13 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "outDir": "./dist",
-    "paths": { "/*": ["src/*"] },
+    "resolveJsonModule": true,
     "rootDir": "./src",
     "sourceMap": true,
     "strict": true,
     "strictPropertyInitialization": false,
-    "target": "ES6"
+    "target": "esnext"
   },
-  "include": ["src", "@types"]
+  "include": ["src"],
+  "exclude": ["src/test"]
 }
