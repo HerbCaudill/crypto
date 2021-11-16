@@ -126,3 +126,7 @@ const message = 'two if by night, three if by day'
 const seed = 'TEST_HASH_PURPOSE'
 const hash = crypto.hash(message, seed)
 ```
+
+---
+
+Note: version 1 used `TweetNacl.js`; version 2 (current) uses `libsodium.js`.
