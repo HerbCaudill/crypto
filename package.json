@@ -1,6 +1,6 @@
 {
   "name": "@herbcaudill/crypto",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "private": false,
   "author": {
@@ -26,9 +26,9 @@
     "msgpack-lite": "0"
   },
   "devDependencies": {
-    "@types/libsodium-wrappers": "0",
     "@types/jest": "27",
     "@types/json-stable-stringify": "1",
+    "@types/libsodium-wrappers": "0",
     "@types/msgpack-lite": "0",
     "@types/node": "16",
     "esbuild": "0",
