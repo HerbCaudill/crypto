@@ -1,6 +1,6 @@
 ## @herbcaudill/crypto
 
-These are utility wrapper functions around [TweetNaCl.js](https://tweetnacl.js.org/#/) that simplify the process of encrypting, decrypting, signing, and hashing text in string form.
+These are utility wrapper functions around [libsodium.js](https://github.com/jedisct1/libsodium.js/) that simplify the process of encrypting, decrypting, signing, and hashing text in string form.
 
 The NaCl suite was originally conceived to help developers write secure code by removing as many decision points as possible, and only including the best-in-class algorithms for a small number of primitives.
 
@@ -18,7 +18,7 @@ The functions provided by this library encapsulate my preferred solutions to tho
 - All functions output strings
 - Human-facing text is encoded and decoded as `utf-8`
 - Keys and ciphers are encoded and decoded as `base58`
-- Passwords are stretched using `scrypt`
+- Short passwords are stretched using the Argon2id algorithm
 
 ### Installation
 
@@ -117,11 +117,12 @@ Note that signature keys cannot be used for asymmetric encryption, and vice vers
 
 #### Cryptographic hashes
 
-The `hash` function takes two strings &mdash; a key and the content to be hashed.
+The `hash` function takes two strings &mdash; the content to be hashed, and a seed.
 
 ```ts
 import { hash } from '@herbcaudill/crypto'
 
-const seed = generateSomeRandomSeed()
-const hashedSeed = hash('GENERATE_SOMETHING_SOMETHING', seed)
+const message = 'two if by night, three if by day'
+const seed = 'TEST_HASH_PURPOSE'
+const hash = crypto.hash(message, seed)
 ```
