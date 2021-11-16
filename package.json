@@ -7,7 +7,7 @@
     "name": "Herb Caudill",
     "email": "herb@devresults.com"
   },
-  "description": "Wrapper functions for TweetNaCl",
+  "description": "Wrapper functions for libsodium",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,7 +16,6 @@
   },
   "scripts": {
     "build": "tsc --outDir dist",
-    "postbuild": "tsc --emitDeclarationOnly --outDir dist",
     "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
@@ -28,7 +27,7 @@
   },
   "devDependencies": {
     "@types/libsodium-wrappers": "0",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "27",
     "@types/json-stable-stringify": "1",
     "@types/msgpack-lite": "0",
     "@types/node": "16",
