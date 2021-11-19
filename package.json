@@ -21,6 +21,7 @@
   "dependencies": {
     "@stablelib/utf8": "1",
     "base-x": "3",
+    "fast-memoize": "2",
     "json-stable-stringify": "1",
     "libsodium-wrappers": "0",
     "msgpack-lite": "0"
