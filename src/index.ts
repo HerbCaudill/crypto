@@ -1,4 +1,5 @@
-﻿import sodium from 'libsodium-wrappers'
+﻿import memoize from 'fast-memoize'
+import sodium from 'libsodium-wrappers'
 import msgpack from 'msgpack-lite'
 import { DecryptParams, Encoder, EncryptParams, Key, Payload, SignedMessage } from './types'
 import { base58, keypairToBase58, keyToBytes, payloadToBytes, utf8 } from './util'
@@ -160,22 +161,31 @@ export const signatures = {
 
 /** Derives a key from a low-entropy input, such as a password. Current version of libsodium
  * uses the Argon2id algorithm, although that may change in later versions. */
-export const stretch = (password: Key) => {
+export const stretch = memoize((password: Key) => {
   const passwordBytes =
     typeof password === 'string'
       ? keyToBytes(password, base58.detect(password) ? 'base58' : 'utf8')
       : password
   const salt = base58.decode('H5B4DLSXw5xwNYFdz1Wr6e')
   if (passwordBytes.length >= 16) return sodium.crypto_generichash(32, passwordBytes, salt) // it's long enough -- just hash to expand it to 32 bytes
+
+  // during testing we use stretch parameters that are faster, but consequently less secure
+  const isProd = process.env.NODE_ENV === 'production'
+  const opsLimit = isProd
+    ? sodium.crypto_pwhash_OPSLIMIT_INTERACTIVE
+    : sodium.crypto_pwhash_OPSLIMIT_MIN
+  const memLimit = isProd
+    ? sodium.crypto_pwhash_MEMLIMIT_INTERACTIVE
+    : sodium.crypto_pwhash_MEMLIMIT_MIN
   return sodium.crypto_pwhash(
     32,
     passwordBytes,
     salt,
-    sodium.crypto_pwhash_OPSLIMIT_INTERACTIVE,
-    sodium.crypto_pwhash_MEMLIMIT_INTERACTIVE,
+    opsLimit,
+    memLimit,
     sodium.crypto_pwhash_ALG_DEFAULT
   )
-}
+})
 
 /** Computes a fixed-length fingerprint for an arbitrary long message. */
 export const hash = (
