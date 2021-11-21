@@ -10,7 +10,7 @@ describe('stretch', () => {
 
     // results are deterministic
     expect(base58.encode(key)).toMatchInlineSnapshot(
-      `"8hYkvmB2xxdjzi7ZL7DNKXUFEDHsAHWs66fMXYkpdDWr"`
+      `"B4WBEeoH1NQGiNjKLQ4vi9wtbBskG7sTpL4Tpy8EksCU"`
     )
   })
 
@@ -20,7 +20,7 @@ describe('stretch', () => {
 
     // results are deterministic
     expect(base58.encode(key)).toMatchInlineSnapshot(
-      `"GwHAQ3X85pUcMb862DEwovntjKXtBWznTJUKqomYK5ei"`
+      `"A5wkCHbfhAdihYHspkD9XfPaQwnEsadD5FbQYWW4GCan"`
     )
   })
 })
