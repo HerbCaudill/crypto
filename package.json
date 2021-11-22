@@ -9,7 +9,7 @@
   },
   "description": "Wrapper functions for libsodium",
   "type": "module",
-  "main": "./dist/index.js",
+  "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "engines": {
     "node": ">=14"
