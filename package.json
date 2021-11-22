@@ -14,6 +14,9 @@
   "engines": {
     "node": ">=14"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc --outDir dist",
     "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
