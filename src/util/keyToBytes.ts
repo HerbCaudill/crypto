@@ -1,4 +1,4 @@
-﻿import * as utf8 from '@stablelib/utf8'
+﻿import utf8 from '@stablelib/utf8'
 import { base58 } from './base58'
 import { Key } from '../types'
 
