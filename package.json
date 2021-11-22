@@ -19,8 +19,8 @@
     "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
+    "@herbcaudill/base-x": "4",
     "@stablelib/utf8": "1",
-    "base-x": "3",
     "fast-memoize": "2",
     "json-stable-stringify": "1",
     "libsodium-wrappers": "0",

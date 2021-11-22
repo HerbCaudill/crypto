@@ -1,4 +1,4 @@
-﻿import basex from 'base-x'
+﻿import { basex } from '@herbcaudill/base-x'
 
 const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 const _base58 = basex(BASE58)
