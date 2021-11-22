@@ -303,9 +303,9 @@
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
 "@herbcaudill/base-x@4":
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/@herbcaudill/base-x/-/base-x-4.0.5.tgz#d61f7852a105e444c96ed3396af99f88b2135ed0"
-  integrity sha512-JS0M5NhL9hrDh/h46UulyJdNNgP0JQhun7rIKE2a5wFBpyUCSoKkUD0CSdXAyDJGbxvQRXEX4dtTFobao5PJmg==
+  version "4.0.6"
+  resolved "https://registry.yarnpkg.com/@herbcaudill/base-x/-/base-x-4.0.6.tgz#681a5921ea55b61a431c49ade9955322b02337cd"
+  integrity sha512-9BaPxLhtOGn5Os1gnG223StA8BvOm2vm8Unatj6nLoEV1lL8PVDyhsZV1yJXSSWEc8aHnQAJG5+NbvGMveaqeQ==
 
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
