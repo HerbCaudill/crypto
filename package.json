@@ -9,6 +9,7 @@
   },
   "description": "Wrapper functions for libsodium",
   "type": "module",
+  "main": "./dist/index.js",
   "exports": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "engines": {
@@ -18,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --outDir dist",
+    "build": "tsc",
     "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
