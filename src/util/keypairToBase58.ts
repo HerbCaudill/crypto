@@ -6,7 +6,6 @@ export const keypairToBase58 = (keypair: KeyPair) => ({
 })
 
 export interface KeyPair {
-  keyType: KeyType
   privateKey: Uint8Array
   publicKey: Uint8Array
 }
