@@ -1,7 +1,12 @@
-﻿import { KeyPair } from 'libsodium-wrappers'
-import { base58 } from './base58'
+﻿import { base58 } from './base58'
 
 export const keypairToBase58 = (keypair: KeyPair) => ({
   publicKey: base58.encode(keypair.publicKey),
   secretKey: base58.encode(keypair.privateKey),
 })
+
+export interface KeyPair {
+  keyType: KeyType
+  privateKey: Uint8Array
+  publicKey: Uint8Array
+}
