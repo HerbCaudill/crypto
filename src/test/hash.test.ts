@@ -1,5 +1,5 @@
 import { keyToBytes } from '../util'
-import { hash } from '../index'
+import { hash } from '..'
 
 describe('crypto', () => {
   describe('hash', () => {
