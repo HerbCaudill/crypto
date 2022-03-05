@@ -6,7 +6,10 @@ import { base58, keypairToBase58, keyToBytes, payloadToBytes, utf8 } from './uti
 
 await sodium.ready
 
-/** Returns an object containing wrappers of some libsodium crypto functions, accepting and returning base58 strings rather than byte arrays. */
+/**
+ * Wrappers of selected libsodium crypto functions. Each of these functions accepts and returns
+ * base58 strings rather than byte arrays.
+ */
 
 export const asymmetric = {
   /**
