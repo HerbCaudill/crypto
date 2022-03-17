@@ -26,7 +26,6 @@
     "@herbcaudill/base-x": "4",
     "@stablelib/utf8": "1",
     "fast-memoize": "2",
-    "json-stable-stringify": "1",
     "libsodium-wrappers": "0",
     "msgpack-lite": "0"
   },

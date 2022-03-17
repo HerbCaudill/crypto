@@ -2,7 +2,7 @@
 import sodium from 'libsodium-wrappers'
 import msgpack from 'msgpack-lite'
 import { DecryptParams, Encoder, EncryptParams, Key, Payload, SignedMessage } from './types'
-import { base58, keypairToBase58, keyToBytes, payloadToBytes, utf8 } from './util'
+import { base58, keypairToBase58, keyToBytes } from './util'
 
 await sodium.ready
 
@@ -34,7 +34,7 @@ export const asymmetric = {
    */
   encrypt: ({ secret, recipientPublicKey, senderSecretKey }: EncryptParams): string => {
     const nonce = sodium.randombytes_buf(sodium.crypto_box_NONCEBYTES)
-    const messageBytes = payloadToBytes(secret)
+    const messageBytes = msgpack.encode(secret)
 
     let senderPublicKey: string | undefined
     if (senderSecretKey === undefined) {
@@ -77,14 +77,14 @@ export const asymmetric = {
       keyToBytes(senderPublicKey!),
       keyToBytes(recipientSecretKey)
     )
-    return utf8.decode(decrypted)
+    return msgpack.decode(decrypted)
   },
 }
 
 export const symmetric = {
   /**
    * Symmetrically encrypts a string of text (or utf8-encoded byte array).
-   * @param payload The plaintext (or utf8-encoded byte array) to encrypt
+   * @param payload The plaintext to encrypt
    * @param password An encryption key (32 bytes long or more), or a password to be expanded into a 32-byte key
    * @returns The encrypted data, in msgpack format
    * @see symmetric.decrypt
@@ -92,7 +92,7 @@ export const symmetric = {
   encrypt: (payload: Payload, password: Key): string => {
     const key = stretch(password)
     const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES)
-    const messageBytes = payloadToBytes(payload)
+    const messageBytes = msgpack.encode(payload)
     const encrypted = sodium.crypto_secretbox_easy(messageBytes, nonce, key)
 
     const cipherBytes = msgpack.encode({ nonce, message: encrypted })
@@ -114,7 +114,7 @@ export const symmetric = {
     const { nonce, message } = msgpack.decode(cipherBytes)
 
     const decrypted = sodium.crypto_secretbox_open_easy(message, nonce, key)
-    return utf8.decode(decrypted)
+    return msgpack.decode(decrypted)
   },
 }
 
@@ -146,7 +146,7 @@ export const signatures = {
   ): string =>
     base58.encode(
       sodium.crypto_sign_detached(
-        payloadToBytes(payload), //
+        msgpack.encode(payload), //
         keyToBytes(secretKey)
       )
     ),
@@ -157,7 +157,7 @@ export const signatures = {
   verify: ({ payload, signature, publicKey }: SignedMessage): boolean =>
     sodium.crypto_sign_verify_detached(
       keyToBytes(signature),
-      payloadToBytes(payload),
+      msgpack.encode(payload),
       keyToBytes(publicKey)
     ),
 }
@@ -197,7 +197,7 @@ export const hash = (
   /** The data to hash. */
   payload: Payload
 ) => {
-  const hash = sodium.crypto_generichash(32, payloadToBytes(payload), keyToBytes(seed, 'utf8'))
+  const hash = sodium.crypto_generichash(32, msgpack.encode(payload), keyToBytes(seed, 'utf8'))
   return base58.encode(hash)
 }
 

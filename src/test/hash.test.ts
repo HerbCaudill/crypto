@@ -12,7 +12,7 @@ describe('crypto', () => {
 
     it('results are deterministic', () => {
       const h = hash(payload, 'TEST_HASH_PURPOSE')
-      expect(h).toMatchInlineSnapshot(`"CkG7uYzjkuKco3BW8tbAK9RwynWvsNYNDstmLj2Ark3T"`)
+      expect(h).toMatchInlineSnapshot(`"14rA39xtqMBQjd3oGekYjaiqK8qsdfQqSF69zdThvVz4"`)
     })
 
     it('gives different results with different seeds', () => {
