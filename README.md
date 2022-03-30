@@ -129,4 +129,8 @@ const hash = crypto.hash(message, seed)
 
 ---
 
-Note: version 1 used `TweetNacl.js`; version 2 (current) uses `libsodium.js`.
+### Release notes
+
+- version 1 used `TweetNacl.js`
+- version 2+ uses `libsodium.js`.
+- version 3 uses msgpack rather than JSON.stringify to encode objects
