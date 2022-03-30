@@ -1,6 +1,6 @@
 {
   "name": "@herbcaudill/crypto",
-  "version": "2.1.6",
+  "version": "3.0.1",
   "license": "MIT",
   "private": false,
   "author": {
@@ -26,7 +26,6 @@
     "@herbcaudill/base-x": "4",
     "@stablelib/utf8": "1",
     "fast-memoize": "2",
-    "json-stable-stringify": "1",
     "libsodium-wrappers": "0",
     "msgpack-lite": "0"
   },

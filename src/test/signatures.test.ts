@@ -11,7 +11,7 @@ describe('crypto', () => {
       const alice = keyPair('alice')
       const signature = sign(payload, alice.secretKey)
       expect(signature).toMatchInlineSnapshot(
-        `"9Jnx4BemzNgkmZL9ojT9nvDmpemwqrjHAWxSXJaipAsYpNZq9nMBUDbAFXvV8866RmDau2gj1jETZmrK8RNoQRR"`
+        `"2NkJHbpTYjZqrdnRKqzTtVKNrGcsDSFh2mdx7GdTeoMGXfwkMDXzKywASZkgoZ6Q7Try2BPrptnLjdstxmzRnu1E"`
       )
     })
 
@@ -45,17 +45,6 @@ describe('crypto', () => {
       const alice = keyPair('alice')
       const { secretKey, publicKey } = alice
       const signature = sign(payload, secretKey)
-      const isLegit = verify({ payload, signature, publicKey })
-      expect(isLegit).toBe(true)
-    })
-
-    test(`JSON normalization`, () => {
-      const payload = { a: 1, b: 2, c: 3 }
-      const scrambled = { b: 2, a: 1, c: 3 }
-      const alice = keyPair('alice')
-
-      const { secretKey, publicKey } = alice
-      const signature = sign(scrambled, secretKey)
       const isLegit = verify({ payload, signature, publicKey })
       expect(isLegit).toBe(true)
     })
