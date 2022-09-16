@@ -28,7 +28,7 @@ export const asymmetric = {
   },
 
   /**
-   * Asymmetrically encrypts a string of text.
+   * Asymmetrically encrypts a string or object.
    * @returns The encrypted data, encoded in msgpack format as a base58 string
    * @see asymmetric.decrypt
    */
@@ -60,10 +60,10 @@ export const asymmetric = {
 
   /**
    * Asymmetrically decrypts a message encrypted by `asymmetric.encrypt`.
-   * @returns The original plaintext
+   * @returns The original object or plaintext
    * @see asymmetric.encrypt
    */
-  decrypt: ({ cipher, recipientSecretKey, senderPublicKey }: DecryptParams): string => {
+  decrypt: ({ cipher, recipientSecretKey, senderPublicKey }: DecryptParams): any => {
     const cipherBytes = keyToBytes(cipher)
     const unpackedCipher = msgpack.decode(cipherBytes)
     const { nonce, message } = unpackedCipher
@@ -83,7 +83,7 @@ export const asymmetric = {
 
 export const symmetric = {
   /**
-   * Symmetrically encrypts a string of text (or utf8-encoded byte array).
+   * Symmetrically encrypts a string of text, a byte array, or an object.
    * @param payload The plaintext to encrypt
    * @param password An encryption key (32 bytes long or more), or a password to be expanded into a 32-byte key
    * @returns The encrypted data, in msgpack format
@@ -104,7 +104,7 @@ export const symmetric = {
    * Symmetrically decrypts a message encrypted by `symmetric.encrypt`.
    * @param cipher The encrypted data in msgpack format
    * @param password The password or key used to encrypt
-   * @returns The original plaintext
+   * @returns The original plaintext, byte array, or object
    * @see symmetric.encrypt
    */
   decrypt: (cipher: string, password: Key): string => {
