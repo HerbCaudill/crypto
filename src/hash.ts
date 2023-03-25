@@ -1,4 +1,4 @@
-import sodium from 'libsodium-wrappers'
+import sodium from 'libsodium-wrappers-sumo'
 import msgpack from 'msgpack-lite'
 import { Payload } from './types'
 import { base58, keyToBytes } from './util'

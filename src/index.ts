@@ -1,4 +1,4 @@
-﻿import sodium from 'libsodium-wrappers'
+﻿import sodium from 'libsodium-wrappers-sumo'
 await sodium.ready
 
 export * from './asymmetric'

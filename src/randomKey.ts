@@ -1,4 +1,4 @@
-import sodium from 'libsodium-wrappers'
+import sodium from 'libsodium-wrappers-sumo'
 import { base58 } from './util'
 
 /** Returns an unpredictable key with the given length (32 bytes by default).*/

@@ -1,5 +1,5 @@
 import memoize from 'fast-memoize'
-import sodium from 'libsodium-wrappers'
+import sodium from 'libsodium-wrappers-sumo'
 import { Base58 } from './types'
 import { base58, keyToBytes } from './util'
 
