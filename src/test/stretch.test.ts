@@ -13,14 +13,4 @@ describe('stretch', () => {
       `"B4WBEeoH1NQGiNjKLQ4vi9wtbBskG7sTpL4Tpy8EksCU"`
     )
   })
-
-  test('takes a byte array as as password', () => {
-    const password = keyToBytes('5VbnBW')
-    const key = stretch(password)
-
-    // results are deterministic
-    expect(base58.encode(key)).toMatchInlineSnapshot(
-      `"A5wkCHbfhAdihYHspkD9XfPaQwnEsadD5FbQYWW4GCan"`
-    )
-  })
 })

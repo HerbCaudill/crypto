@@ -1,15 +1,14 @@
-﻿import { basex } from '@herbcaudill/base-x'
-
-const BASE58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
-const _base58 = basex(BASE58)
+﻿import { base58 as _base58 } from '@herbcaudill/base-x'
+import { Base58 } from 'src/types'
 
 export const base58 = {
-  ..._base58,
+  encode: _base58.encode as (b: Uint8Array) => Base58,
   decode: (s: string) => {
     const b = _base58.decode(s)
     return bufferToArray(b)
   },
-  detect: (s: string) => /^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$/.test(s),
+  detect: (s: string): s is Base58 =>
+    /^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]+$/.test(s),
 }
 
 // https://stackoverflow.com/a/31394257/239663

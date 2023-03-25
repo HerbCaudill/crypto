@@ -1,5 +1,5 @@
 import { randomKey, signatures, asymmetric } from '..'
-import { SignedMessage } from '../types'
+import { Base58, SignedMessage } from '../types'
 
 const { keyPair, sign, verify } = signatures
 
@@ -80,7 +80,7 @@ describe('crypto', () => {
         publicKey: alice.publicKey,
       }
 
-      const badSignature = '5VanBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67' // prettier-ignore
+      const badSignature = '5VanBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67' as Base58
       const badMessage = {
         ...signedMessage,
         signature: badSignature,
@@ -96,7 +96,7 @@ describe('crypto', () => {
         signature: sign(payload, alice.secretKey),
         publicKey: alice.publicKey,
       }
-      const badKey = 'AAAAAnDzHhf26V8KcmQdxquK4fWUNDRy3MA6Sqf5hSma'
+      const badKey = 'AAAAAnDzHhf26V8KcmQdxquK4fWUNDRy3MA6Sqf5hSma' as Base58
       const badMessage = {
         ...signedMessage,
         publicKey: badKey,

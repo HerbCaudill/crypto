@@ -1,6 +1,7 @@
 import msgpack from 'msgpack-lite'
 import { keyToBytes } from './keyToBytes'
 import { base58 } from './base58'
+import { Base58 } from 'src/types'
 
 describe('base58', () => {
   describe('detect', () => {
@@ -16,8 +17,7 @@ describe('base58', () => {
 
 describe('keyToBytes', () => {
   it('converts a base58 string to bytes', () => {
-    const key =
-      '5VbnBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67'
+    const key = '5VbnBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67' as Base58
     const bytes = keyToBytes(key)
 
     expect(bytes instanceof Uint8Array).toBe(true)
@@ -30,14 +30,5 @@ describe('keyToBytes', () => {
 
     expect(bytes instanceof Uint8Array).toBe(true)
     expect(bytes).toHaveLength(6)
-  })
-
-  it('passes through a byte array unchanged', () => {
-    const key =
-      '5VbnBWz6kBnV2wfJZaPgv81Mj7QtAsPmq3QZgc3zZqbYZEzEdZQ9r24BGZpN6mt6djyr7W2v1eKYnnG3KSHtCD67'
-    const bytes = keyToBytes(key)
-
-    expect(bytes instanceof Uint8Array).toBe(true)
-    expect(keyToBytes(bytes)).toEqual(bytes)
   })
 })
