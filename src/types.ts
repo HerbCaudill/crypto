@@ -1,5 +1,6 @@
 ﻿export type Utf8 = string & { _utf8: false }
 export type Base58 = string & { _base58: false }
+export type Hash = Base58 & { _hash: false }
 export type Payload = string | Uint8Array | object
 
 export type ByteKeypair = {

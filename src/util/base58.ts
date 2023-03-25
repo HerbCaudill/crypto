@@ -1,5 +1,5 @@
 ﻿import { base58 as _base58 } from '@herbcaudill/base-x'
-import { Base58 } from 'src/types'
+import { Base58 } from '../types'
 
 export const base58 = {
   encode: _base58.encode as (b: Uint8Array) => Base58,

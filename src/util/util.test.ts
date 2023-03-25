@@ -1,7 +1,6 @@
-import msgpack from 'msgpack-lite'
-import { keyToBytes } from './keyToBytes'
+import { Base58 } from '../types'
 import { base58 } from './base58'
-import { Base58 } from 'src/types'
+import { keyToBytes } from './keyToBytes'
 
 describe('base58', () => {
   describe('detect', () => {
