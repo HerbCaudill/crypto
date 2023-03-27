@@ -1,42 +1,67 @@
 import sodium from 'libsodium-wrappers-sumo'
-import msgpack from 'msgpack-lite'
+import msgpack from 'msgpackr'
 import { Base58, Payload } from './types'
 import { base58, keyToBytes } from './util'
 import { stretch } from './stretch'
 
-export const symmetric = {
-  /**
-   * Symmetrically encrypts a string of text, a byte array, or an object.
-   * @param payload The plaintext to encrypt
-   * @param password An encryption key (32 bytes long or more), or a password to be expanded into a 32-byte key
-   * @returns The encrypted data, in msgpack format
-   * @see symmetric.decrypt
-   */
-  encrypt: (payload: Payload, password: Base58): Base58 => {
-    const key = stretch(password)
-    const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES)
-    const messageBytes = msgpack.encode(payload)
-    const encrypted = sodium.crypto_secretbox_easy(messageBytes, nonce, key)
-
-    const cipherBytes = msgpack.encode({ nonce, message: encrypted })
-
-    return base58.encode(cipherBytes)
-  },
-
-  /**
-   * Symmetrically decrypts a message encrypted by `symmetric.encrypt`.
-   * @param cipher The encrypted data in msgpack format
-   * @param password The password or key used to encrypt
-   * @returns The original plaintext, byte array, or object
-   * @see symmetric.encrypt
-   */
-  decrypt: (cipher: Base58, password: string): Payload => {
-    const key = stretch(password)
-    const cipherBytes = keyToBytes(cipher)
-
-    const { nonce, message } = msgpack.decode(cipherBytes)
-
-    const decrypted = sodium.crypto_secretbox_open_easy(message, nonce, key)
-    return msgpack.decode(decrypted)
-  },
+/**
+ * Symmetrically encrypts a byte array.
+ */
+const encryptBytes = (
+  /** The byte array to encrypt */
+  payload: Uint8Array,
+  /** The password used to encrypt */
+  password: string
+): Uint8Array => {
+  const key = stretch(password)
+  const nonce = sodium.randombytes_buf(sodium.crypto_secretbox_NONCEBYTES)
+  const encrypted = sodium.crypto_secretbox_easy(payload, nonce, key)
+  const cipherBytes = msgpack.encode({ nonce, message: encrypted })
+  return cipherBytes
 }
+
+/**
+ * Symmetrically decrypts a message encrypted by `symmetric.encryptBytes`. Returns the original byte array.
+ */
+const decryptBytes = (
+  /** The encrypted data in msgpack format */
+  cipher: Uint8Array,
+  /** The password used to encrypt */
+  password: string
+): Uint8Array => {
+  const key = stretch(password)
+  const { nonce, message } = msgpack.decode(cipher)
+  return sodium.crypto_secretbox_open_easy(message, nonce, key)
+}
+
+/**
+ * Symmetrically encrypts a string or object. Returns the encrypted data, encoded in msgpack format
+ * as a base58 string.
+ */
+const encrypt = (
+  /** The plaintext or object to encrypt */
+  payload: Payload,
+  /** The password used to encrypt */
+  password: string
+): Base58 => {
+  const messageBytes = msgpack.encode(payload)
+  const cipherBytes = encryptBytes(messageBytes, password)
+  const cipher = base58.encode(cipherBytes)
+  return cipher
+}
+
+/**
+ * Symmetrically decrypts a message encrypted by `symmetric.encrypt`.
+ */
+const decrypt = (
+  /** The encrypted data in msgpack format, base58-encoded */
+  cipher: Base58,
+  /** The password used to encrypt */
+  password: string
+): Payload => {
+  const cipherBytes = keyToBytes(cipher)
+  const decrypted = decryptBytes(cipherBytes, password)
+  return msgpack.decode(decrypted)
+}
+
+export const symmetric = { encryptBytes, decryptBytes, encrypt, decrypt }
