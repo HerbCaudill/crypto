@@ -1,5 +1,5 @@
 import sodium from 'libsodium-wrappers-sumo'
-import msgpack from 'msgpack-lite'
+import { pack, unpack } from 'msgpackr'
 import { DecryptParams, EncryptParams, Base58, Payload } from './types'
 import { base58, keypairToBase58, keyToBytes } from './util'
 import { stretch } from './stretch'
@@ -32,7 +32,7 @@ export const asymmetric = {
    */
   encrypt: ({ secret, recipientPublicKey, senderSecretKey }: EncryptParams): Base58 => {
     const nonce = sodium.randombytes_buf(sodium.crypto_box_NONCEBYTES)
-    const messageBytes = msgpack.encode(secret)
+    const messageBytes = pack(secret)
 
     let senderPublicKey: string | undefined
     if (senderSecretKey === undefined) {
@@ -52,7 +52,7 @@ export const asymmetric = {
       keyToBytes(recipientPublicKey),
       keyToBytes(senderSecretKey)
     )
-    const cipherBytes = msgpack.encode({ nonce, message, senderPublicKey })
+    const cipherBytes = pack({ nonce, message, senderPublicKey })
     return base58.encode(cipherBytes)
   },
 
@@ -63,7 +63,7 @@ export const asymmetric = {
    */
   decrypt: ({ cipher, recipientSecretKey, senderPublicKey }: DecryptParams): Payload => {
     const cipherBytes = keyToBytes(cipher)
-    const unpackedCipher = msgpack.decode(cipherBytes)
+    const unpackedCipher = unpack(cipherBytes)
     const { nonce, message } = unpackedCipher
 
     // if sender public key is not included, assume an ephemeral public key is included in metadata
@@ -75,6 +75,6 @@ export const asymmetric = {
       keyToBytes(senderPublicKey!),
       keyToBytes(recipientSecretKey)
     )
-    return msgpack.decode(decrypted)
+    return unpack(decrypted)
   },
 }

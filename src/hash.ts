@@ -1,5 +1,5 @@
 import sodium from 'libsodium-wrappers-sumo'
-import msgpack from 'msgpack-lite'
+import { pack } from 'msgpackr'
 import { Payload } from './types'
 import { base58, keyToBytes } from './util'
 
@@ -11,6 +11,7 @@ export const hash = (
   /** The data to hash. */
   payload: Payload
 ) => {
-  const hash = sodium.crypto_generichash(32, msgpack.encode(payload), keyToBytes(seed, 'utf8'))
+  const bytes = pack(payload)
+  const hash = sodium.crypto_generichash(32, bytes, keyToBytes(seed, 'utf8'))
   return base58.encode(hash)
 }
