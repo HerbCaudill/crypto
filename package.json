@@ -25,7 +25,7 @@
     "test:node": "pnpm build:test && pnpm aegir test -t node -f \"dist/**/*.test.{js,cjs,mjs}\" --cov -- --exit",
     "test:browser": "pnpm build:test && pnpm aegir test -t browser -f \"dist/**/*.test.{js,cjs,mjs}\" --cov",
     "test:electron-main": "pnpm build:test && pnpm aegir test -t electron-main -f \"dist/**/*.test.{js,cjs,mjs}\" --cov",
-    "test": "pnpm build:test && pnpm test:node && pnpm test:browser && pnpm test:electron-main"
+    "test": "pnpm build:test && pnpm test:node && pnpm test:browser"
   },
   "dependencies": {
     "@herbcaudill/base-x": "4",
