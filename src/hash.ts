@@ -1,7 +1,7 @@
 import sodium from 'libsodium-wrappers-sumo'
 import { pack } from 'msgpackr'
-import { Payload } from './types'
-import { base58, keyToBytes } from './util'
+import { Payload } from './types.js'
+import { base58, keyToBytes } from './util/index.js'
 
 /** Computes a fixed-length fingerprint for an arbitrary long message. */
 

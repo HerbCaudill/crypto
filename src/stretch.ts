@@ -1,7 +1,7 @@
 import memoize from 'fast-memoize'
 import sodium from 'libsodium-wrappers-sumo'
-import { Base58 } from './types'
-import { base58, keyToBytes } from './util'
+import { Base58 } from './types.js'
+import { base58, keyToBytes } from './util/index.js'
 
 /** Derives a key from a low-entropy input, such as a password. Current version of libsodium
  * uses the Argon2id algorithm, although that may change in later versions. */

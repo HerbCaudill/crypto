@@ -1,8 +1,8 @@
 import sodium from 'libsodium-wrappers-sumo'
 import { pack, unpack } from 'msgpackr'
-import { Base58, Payload, SignedMessage } from './types'
-import { base58, keypairToBase58, keyToBytes } from './util'
-import { stretch } from './stretch'
+import { Base58, Payload, SignedMessage } from './types.js'
+import { base58, keypairToBase58, keyToBytes } from './util/index.js'
+import { stretch } from './stretch.js'
 
 /**
  * @returns A key pair consisting of a public key and a secret key, encoded as base58 strings, to

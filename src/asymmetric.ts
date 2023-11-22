@@ -1,8 +1,8 @@
 import sodium from 'libsodium-wrappers-sumo'
 import { pack, unpack } from 'msgpackr'
-import { DecryptParams, EncryptParams, Base58, Payload } from './types'
-import { base58, keypairToBase58, keyToBytes } from './util'
-import { stretch } from './stretch'
+import { DecryptParams, EncryptParams, Base58, Payload } from './types.js'
+import { base58, keypairToBase58, keyToBytes } from './util/index.js'
+import { stretch } from './stretch.js'
 
 /**
  * Wrappers of selected libsodium crypto functions. Each of these functions accepts and returns

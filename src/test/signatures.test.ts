@@ -1,5 +1,7 @@
-import { randomKey, signatures, asymmetric } from '..'
+import { randomKey, signatures, asymmetric } from '../index.js'
 import { Base58, SignedMessage } from '../types'
+
+import { expect } from 'aegir/chai'
 
 const { keyPair, sign, verify } = signatures
 
@@ -7,32 +9,32 @@ describe('crypto', () => {
   describe('signatures', () => {
     const payload = 'one if by day, two if by night'
 
-    test('alice signs with her secret key', () => {
+    it('alice signs with her secret key', () => {
       const alice = keyPair('alice')
       const signature = sign(payload, alice.secretKey)
-      expect(signature).toMatchInlineSnapshot(
-        `"2NkJHbpTYjZqrdnRKqzTtVKNrGcsDSFh2mdx7GdTeoMGXfwkMDXzKywASZkgoZ6Q7Try2BPrptnLjdstxmzRnu1E"`
+      expect(signature).to.equal(
+        "2NkJHbpTYjZqrdnRKqzTtVKNrGcsDSFh2mdx7GdTeoMGXfwkMDXzKywASZkgoZ6Q7Try2BPrptnLjdstxmzRnu1E"
       )
     })
 
-    test(`bob verifies using alice's public key`, () => {
+    it(`bob verifies using alice's public key`, () => {
       const alice = keyPair('alice')
       const signature = sign(payload, alice.secretKey)
       const { publicKey } = alice
       const isLegit = verify({ payload, signature, publicKey })
-      expect(isLegit).toBe(true)
+      expect(isLegit).to.be.true()
     })
 
-    test(`round trip with bytes payload`, () => {
+    it(`round trip with bytes payload`, () => {
       const alice = keyPair('alice')
       const payload = randomKey()
       const { secretKey, publicKey } = alice
       const signature = sign(payload, secretKey)
       const isLegit = verify({ payload, signature, publicKey })
-      expect(isLegit).toBe(true)
+      expect(isLegit).to.be.true()
     })
 
-    test(`round trip with JSON payload`, () => {
+    it(`round trip with JSON payload`, () => {
       const payload = {
         type: 0,
         payload: { team: 'Spies Я Us' },
@@ -46,10 +48,10 @@ describe('crypto', () => {
       const { secretKey, publicKey } = alice
       const signature = sign(payload, secretKey)
       const isLegit = verify({ payload, signature, publicKey })
-      expect(isLegit).toBe(true)
+      expect(isLegit).to.be.true()
     })
 
-    test(`Eve tampers with the message, but Bob is not fooled`, () => {
+    it(`Eve tampers with the message, but Bob is not fooled`, () => {
       // Alice signs a message
       const alice = keyPair('alice')
       const signedMessage: SignedMessage = {
@@ -69,10 +71,10 @@ describe('crypto', () => {
 
       // Bob is not fooled
       const isLegit = verify(tamperedMessage)
-      expect(isLegit).toBe(false)
+      expect(isLegit).to.be.false()
     })
 
-    test(`fails verification if signature is wrong`, () => {
+    it(`fails verification if signature is wrong`, () => {
       const alice = keyPair('alice')
       const signedMessage: SignedMessage = {
         payload,
@@ -86,10 +88,10 @@ describe('crypto', () => {
         signature: badSignature,
       }
       const isLegit = verify(badMessage)
-      expect(isLegit).toBe(false)
+      expect(isLegit).to.be.false()
     })
 
-    test(`fails verification if public key is wrong`, () => {
+    it(`fails verification if public key is wrong`, () => {
       const alice = keyPair('alice')
       const signedMessage: SignedMessage = {
         payload,
@@ -102,26 +104,24 @@ describe('crypto', () => {
         publicKey: badKey,
       }
       const isLegit = verify(badMessage)
-      expect(isLegit).toBe(false)
+      expect(isLegit).to.be.false()
     })
 
-    test('fwiw: cannot use encryption keys to sign', () => {
+    it('fwiw: cannot use encryption keys to sign', () => {
       const keysForAnotherPurpose = asymmetric.keyPair()
       const tryToSignWithEncryptionKeys = () =>
         signatures.sign(payload, keysForAnotherPurpose.secretKey)
-      expect(tryToSignWithEncryptionKeys).toThrow()
+      expect(tryToSignWithEncryptionKeys).throw()
     })
 
-    test('keypair generated from seed is deterministic', () => {
+    it('keypair generated from seed is deterministic', () => {
       // Alice signs a message
       const seed = 'passw0rd'
       const keys = keyPair(seed)
-      expect(keys).toMatchInlineSnapshot(`
-        Object {
-          "publicKey": "ATRhGtszfTKdTYxDLf6PMtvF16xrCXuKNKqP9KQSAZhr",
-          "secretKey": "3ddvXNtSVXGjnLSu4WVCxFvdtqHnL1PQuNxPCMJLMMBrcGGhZ9x5A8xGCCWTh7ADEndy3DWzLCLH9peqE5kjcjn8",
-        }
-      `)
+      expect(keys).to.deep.equal({
+        publicKey: "ATRhGtszfTKdTYxDLf6PMtvF16xrCXuKNKqP9KQSAZhr",
+        secretKey: "3ddvXNtSVXGjnLSu4WVCxFvdtqHnL1PQuNxPCMJLMMBrcGGhZ9x5A8xGCCWTh7ADEndy3DWzLCLH9peqE5kjcjn8",
+      })
     })
   })
 })

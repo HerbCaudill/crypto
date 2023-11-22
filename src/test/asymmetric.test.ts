@@ -1,4 +1,7 @@
-﻿import { signatures, asymmetric } from '..'
+﻿import { signatures, asymmetric } from '../index.js'
+
+import {expect} from 'aegir/chai'
+
 const { keyPair, encrypt, decrypt } = asymmetric
 
 const plaintext = 'The leopard pounces at noon'
@@ -7,39 +10,44 @@ const poop = '💩'
 
 describe('crypto', () => {
   describe('asymmetric encrypt/decrypt', () => {
-    test.each`
-      label              | message
-      ${'plain text'}    | ${plaintext}
-      ${'empty string'}  | ${''}
-      ${'emoji message'} | ${poop}
-      ${'zalgo text'}    | ${zalgoText}
-    `('round trip: $label', ({ message }) => {
-      const alice = keyPair()
-      const bob = keyPair()
-      const eve = keyPair()
+    const tests: {
+      label: string, message: string
+    }[] = [
+      { label: 'plain text', message: plaintext },
+      { label: 'empty string', message: '' },
+      { label: 'emoji message', message: poop },
+      { label: 'zalgo text', message: zalgoText },
+    ]
 
-      const encrypted = encrypt({
-        secret: message,
-        recipientPublicKey: bob.publicKey,
-        senderSecretKey: alice.secretKey,
-      })
-      const decrypted = decrypt({
-        cipher: encrypted,
-        senderPublicKey: alice.publicKey,
-        recipientSecretKey: bob.secretKey,
-      })
-      expect(decrypted).toEqual(message)
+    tests.forEach(({ label, message }) => {
+      it(`round trip: ${label}`, () => {
+        const alice = keyPair()
+        const bob = keyPair()
+        const eve = keyPair()
 
-      const attemptToDecrypt = () =>
-        decrypt({
+        const encrypted = encrypt({
+          secret: message,
+          recipientPublicKey: bob.publicKey,
+          senderSecretKey: alice.secretKey,
+        })
+        const decrypted = decrypt({
           cipher: encrypted,
           senderPublicKey: alice.publicKey,
-          recipientSecretKey: eve.secretKey,
+          recipientSecretKey: bob.secretKey,
         })
-      expect(attemptToDecrypt).toThrow()
+        expect(decrypted).to.equal(message)
+
+        const attemptToDecrypt = () =>
+          decrypt({
+            cipher: encrypted,
+            senderPublicKey: alice.publicKey,
+            recipientSecretKey: eve.secretKey,
+          })
+        expect(attemptToDecrypt).throw()
+      })
     })
 
-    test('fwiw: cannot use signature keys to encrypt', () => {
+    it('fwiw: cannot use signature keys to encrypt', () => {
       const a = signatures.keyPair()
       const b = signatures.keyPair()
       expect(() =>
@@ -48,45 +56,50 @@ describe('crypto', () => {
           recipientPublicKey: b.publicKey,
           senderSecretKey: a.secretKey,
         })
-      ).toThrow()
+      ).throw()
     })
   })
 
   describe('asymmetric encrypt/decrypt with ephemeral key', () => {
-    test.each`
-      label              | message
-      ${'plain text'}    | ${plaintext}
-      ${'empty string'}  | ${''}
-      ${'emoji message'} | ${poop}
-      ${'zalgo text'}    | ${zalgoText}
-    `('round trip: $label', ({ message }) => {
-      const bob = keyPair()
-      const eve = keyPair()
+    const tests: {
+      label: string, message: string
+    }[] = [
+      { label: 'plain text', message: plaintext },
+      { label: 'empty string', message: '' },
+      { label: 'emoji message', message: poop },
+      { label: 'zalgo text', message: zalgoText },
+    ]
 
-      const encrypted = encrypt({
-        secret: message,
-        recipientPublicKey: bob.publicKey,
-      })
-      const decrypted = decrypt({
-        cipher: encrypted,
-        recipientSecretKey: bob.secretKey,
-      })
-      expect(decrypted).toEqual(message)
+    tests.forEach(({ label, message }) => {
+      it(`round trip: ${label}`, () => {
+        const bob = keyPair()
+        const eve = keyPair()
 
-      const attemptToDecrypt = () =>
-        decrypt({
-          cipher: encrypted,
-          recipientSecretKey: eve.secretKey,
+        const encrypted = encrypt({
+          secret: message,
+          recipientPublicKey: bob.publicKey,
         })
-      expect(attemptToDecrypt).toThrow()
+        const decrypted = decrypt({
+          cipher: encrypted,
+          recipientSecretKey: bob.secretKey,
+        })
+        expect(decrypted).to.equal(message)
+
+        const attemptToDecrypt = () =>
+          decrypt({
+            cipher: encrypted,
+            recipientSecretKey: eve.secretKey,
+          })
+        expect(attemptToDecrypt).throw()
+      })
     })
   })
 
   describe('keyPair', () => {
-    test('is deterministic if secretKey is provided', () => {
+    it('is deterministic if secretKey is provided', () => {
       const secretKey = 'C3U7T1J7M9gvhFHkDXeWHuAko8bdHd9w1CJKsLEUCVqp'
       const keys = keyPair(secretKey)
-      expect(keys.publicKey).toMatchInlineSnapshot(`"5gTFPqj34hU2g57uXRWvANQTKRdhuHhREzQqxpwjVLaz"`)
+      expect(keys.publicKey).to.equal("5gTFPqj34hU2g57uXRWvANQTKRdhuHhREzQqxpwjVLaz")
     })
   })
 })

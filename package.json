@@ -19,9 +19,13 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "prepublishOnly": "yarn test && yarn build",
-    "test": "node --no-warnings --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "build:prod": "rimraf dist && tsc",
+    "build:test": "rimraf dist && tsc -p tsconfig.test.json",
+    "prepublishOnly": "pnpm test && pnpm build",
+    "test:node": "pnpm build:test && pnpm aegir test -t node -f \"dist/**/*.test.{js,cjs,mjs}\" --cov -- --exit",
+    "test:browser": "pnpm build:test && pnpm aegir test -t browser -f \"dist/**/*.test.{js,cjs,mjs}\" --cov",
+    "test:electron-main": "pnpm build:test && pnpm aegir test -t electron-main -f \"dist/**/*.test.{js,cjs,mjs}\" --cov",
+    "test": "pnpm build:test && pnpm test:node && pnpm test:browser && pnpm test:electron-main"
   },
   "dependencies": {
     "@herbcaudill/base-x": "4",
@@ -31,25 +35,18 @@
     "msgpackr": "^1.8.5"
   },
   "devDependencies": {
-    "@types/jest": "27",
     "@types/json-stable-stringify": "1",
     "@types/libsodium-wrappers-sumo": "0",
+    "@types/mocha": "^10.0.6",
     "@types/node": "16",
+    "aegir": "^41.1.9",
+    "buffer": "^6.0.3",
     "esbuild": "0",
-    "jest": "27",
+    "mocha": "^10.2.0",
     "prettier": "2",
-    "ts-jest": "27",
+    "rimraf": "^5.0.5",
     "tslib": "1",
     "typescript": "4"
-  },
-  "jest": {
-    "transform": {},
-    "preset": "ts-jest/presets/default-esm",
-    "globals": {
-      "ts-jest": {
-        "useESM": true
-      }
-    }
   },
   "wallaby": {
     "autoDetect": true,
