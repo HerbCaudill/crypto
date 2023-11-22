@@ -1,3 +1,9 @@
+> ### ⚠️ Moved
+> 
+> This library has been folded into the [@localfirst/auth](http://github.com/local-first-web/auth/tree/main/packages/crypto) monorepo, and the NPM package has been moved to the @localfirst namespace. Please replace any dependencies from @herbcaudill/crypto to [@localfirst/crypto](https://www.npmjs.com/package/@localfirst/crypto). 
+
+- - -
+
 ## @herbcaudill/crypto
 
 These are utility wrapper functions around [libsodium.js](https://github.com/jedisct1/libsodium.js/) that simplify the process of encrypting, decrypting, signing, and hashing text in string form.
